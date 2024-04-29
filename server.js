@@ -11,7 +11,7 @@ const express = require('express'),
     {ensureAuthenticated, forwardAuthenticated} = require('./utils/authenticate'),
     PORT = process.env.PORT || 5000
 
-    const indexRouter = require('./routers/indexRouter'),
+const indexRouter = require('./routers/indexRouter'),
     loginRouter = require('./routers/loginRouter'),
     regRouter = require('./routers/regRouter'),
     logoutRouter = require('./routers/logoutRouter'),
@@ -20,7 +20,6 @@ const express = require('express'),
     kycRouter = require('./routers/kycRouter'),
     rewardsRouter = require('./routers/rewardsRouter'),
     apiRouter = require('./routers/apiRouter')
-    rewardsRouter = require('./routers/rewardsRouter')
     
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
