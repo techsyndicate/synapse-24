@@ -17,6 +17,16 @@ const userSchema = new Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    rewards: {
+        type: Array,
+        required: true,
+        default: []
+    },
+    type: {
+        type: String,
+        required: true,
+        default: "User"
     }
 })
 

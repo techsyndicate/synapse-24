@@ -11,14 +11,15 @@ const express = require('express'),
     {ensureAuthenticated, forwardAuthenticated} = require('./utils/authenticate'),
     PORT = process.env.PORT || 5000
 
-const indexRouter = require('./routers/indexRouter'),
+    const indexRouter = require('./routers/indexRouter'),
     loginRouter = require('./routers/loginRouter'),
     regRouter = require('./routers/regRouter'),
     logoutRouter = require('./routers/logoutRouter'),
     profileRouter = require('./routers/profileRouter'),
     dashboardRouter = require('./routers/dashboardRouter'),
-    appRouter = require('./routers/appRouter'),
-    rewardsRouter = require('./routers/rewardsRouter')
+    kycRouter = require('./routers/kycRouter'),
+    rewardsRouter = require('./routers/rewardsRouter'),
+    apiRouter = require('./routers/apiRouter')
     
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
@@ -46,7 +47,8 @@ app.use('/register', forwardAuthenticated, regRouter)
 app.use('/logout', ensureAuthenticated, logoutRouter)
 app.use('/profile', ensureAuthenticated, profileRouter)
 app.use('/dashboard', ensureAuthenticated, dashboardRouter)
-app.use('/app', ensureAuthenticated, appRouter)
+app.use('/api', ensureAuthenticated, apiRouter)
+app.use('/kyc', ensureAuthenticated, kycRouter)
 app.use('/rewards', ensureAuthenticated, rewardsRouter)
 
 app.listen(PORT, console.log(`Ordin <3 TS listening on port ${PORT}`))
