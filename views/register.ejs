@@ -4,15 +4,296 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit';
+            cursor: none;
+            color: #fff;
+        }
+        .bg-img {
+            width: 100vw;
+            aspect-ratio: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -100;
+        }
+        body {
+            background: #18181B;
+            overflow: hidden;
+        }
+        nav {
+            width: 100vw;
+            height: 15vh;
+            padding: 0 6vw;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        nav > h1 {
+            color: #fff;
+            font-weight: 400;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1vw;
+        }
+        .login-button {
+            font-size: 1vw;
+            background: #1A1B1A;
+            padding: 0.6vw 2vw;
+
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+        .reg-button {
+            font-size: 1vw;
+            background: #466EFF;
+            padding: 0.6vw 2vw;
+
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+        #cursor {
+            position: fixed;
+            top: -5px;
+            left: -5px;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        #cursor-border {
+            --size: 50px;
+            position: fixed;
+            top: calc(var(--size) / -2);
+            left: calc(var(--size) / -2);
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            box-shadow: 0 0 0 1px white;
+            pointer-events: none;
+            transition: top 0.15s ease-out, left 0.15s ease-out, width 0.15s ease-out,
+                height 0.15s ease-out, background-color 0.15s ease-out;
+            z-index: 999;
+        }
+        main {
+            height: 85vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        form {
+            width: 31vw;
+            /* height: 70vh; */
+            margin-left: 50vw;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #18181B;
+            border-radius: 14px;
+            margin-top: -5vw;
+        }
+        .top {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 5vh;
+            /* justify-content: center; */
+            gap: 5vh;
+
+            width: 100%;
+        }
+        .headings > h1 {
+            font-weight: 600;
+            font-size: 2.5vw;
+        }
+        .inputs-top, .inputs-bottom {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1vw;
+        }
+        .inputs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.8vh;
+            width: 100%;
+        }
+        input {
+            background: #212123;
+            border: none;
+            outline: none;
+            width: 100%;
+            height: 6.5vh;
+            padding: 1vw 1.5vw;
+            border-radius: 10px;
+            font-size: 1vw;
+        }
+        .top > button {
+            font-size: 1vw;
+            background: #466EFF;
+            padding: 0.6vw 2vw;
+
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            outline: none;
+            border: none;
+        }
+        .bottom {
+            flex-grow: 1;
+            background: #212123;
+            width: 100%;
+            height: 15vh;
+            border-radius: 0 0 14px 14px;
+            /* margin-top: 2.5vh; */
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .bottom > p > a {
+            color: #466EFF !important;
+        }
+        .svg-top {
+            position: absolute;
+            top: -5vh;
+            left: 0;
+            z-index: -99;
+            width: 47vw;
+            height: fit-content;
+        }
+        .svg-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: -99;
+            width: 100vw;
+            height: fit-content;
+        }
+        .logo {
+            height: 3vh;
+        }
+    </style>
 </head>
 <body>
-    <form action="" method="POST">
-        <input type="text" name="fname" placeholder="First Name:">
-        <input type="text" name="lname" placeholder="Last Name:">
-        <input type="email" name="email" placeholder="Email:">
-        <input type="password" name="password" placeholder="Password:">
-        <input type="password" name="cnfpassword" placeholder="Confirm Password:">
-        <input type="submit">
-    </form>
+    <svg class="svg-top" width="903" height="188" viewBox="0 0 903 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_b_121_7)">
+        <path d="M0 188H61.9067C61.9067 188 703.407 188 750.5 188C815 188 903 -1.52588e-05 903 -1.52588e-05H61.9067H0V188Z" fill="#18181B"/>
+        </g>
+        <defs>
+        <filter id="filter0_b_121_7" x="-188.8" y="-188.8" width="1280.6" height="565.6" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feGaussianBlur in="BackgroundImageFix" stdDeviation="94.4"/>
+        <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_121_7"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_121_7" result="shape"/>
+        </filter>
+        </defs>
+    </svg>        
+    <svg class="svg-bottom" width="1920" height="227" viewBox="0 0 1920 227" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 -6.10352e-05L0 227L1920 226.5V178.5H903C842.5 178.5 797 -6.10352e-05 719 -6.10352e-05H1Z" fill="#18181B"/>
+    </svg> 
+        
+        
+    <div id="cursor"></div>
+    <div id="cursor-border"></div>
+    <img draggable="false" src="/login-bg.png" class="bg-img" alt="">
+
+    <nav>
+        <img class="logo" src="/fullLogo.png" alt="">            
+        <div class="buttons">
+            <a href="/login" data-cursor="pointer" class="login-button">Log In</a>
+            <a href="/register" data-cursor="pointer" class="reg-button">Sign Up</a>
+        </div>
+    </nav>
+
+    <main>
+        <form action="" method="POST">
+            <div class="top">
+                <div class="headings">
+                    <h1>Welcome Back...</h1>
+                    <p>Please enter your email and password.</p>
+                </div>
+                <div class="inputs">
+                    <div class="inputs-top">
+                        <input type="text" name="fname" placeholder="First Name:">
+                        <input type="text" name="lname" placeholder="Last Name:">
+                    </div>
+                    <input type="email" name="email" placeholder="Email:">
+                    <div class="inputs-bottom">
+                        <input type="password" name="password" placeholder="Password:">
+                        <input type="password" name="cnfpassword" placeholder="Confirm Password:">
+                    </div>
+                            </div>
+                <!-- <input type="submit"> -->
+                <button data-cursor="pointer">Login</button>
+            </div>
+            <div class="bottom">
+                <p>Already have an account? <a data-cursor="pointer" href="/login">Login</a></p>
+            </div>
+        </form>
+    </main>
+    <script>
+        const cursor = document.querySelector("#cursor");
+        const cursorBorder = document.querySelector("#cursor-border");
+        const cursorPos = { x: 0, y: 0 };
+        const cursorBorderPos = { x: 0, y: 0 };
+
+        document.addEventListener("mousemove", (e) => {
+            cursorPos.x = e.clientX;
+            cursorPos.y = e.clientY;
+
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            });
+
+            requestAnimationFrame(function loop() {
+                const easting = 8;
+                cursorBorderPos.x += (cursorPos.x - cursorBorderPos.x) / easting;
+                cursorBorderPos.y += (cursorPos.y - cursorBorderPos.y) / easting;
+
+                cursorBorder.style.transform = `translate(${cursorBorderPos.x}px, ${cursorBorderPos.y}px)`;
+                requestAnimationFrame(loop);
+            });
+
+            document.querySelectorAll("[data-cursor]").forEach((item) => {
+            item.addEventListener("mouseover", (e) => {
+                if (item.dataset.cursor === "pointer") {
+                    cursorBorder.style.backgroundColor = "transparent";
+                    cursor.style.backgroundColor = "#16e16e";
+                    cursorBorder.style.setProperty("--size", "80px");
+                }
+            });
+            item.addEventListener("mouseout", (e) => {
+                cursor.style.backgroundColor = "#fff";
+                cursorBorder.style.backgroundColor = "unset";
+                cursorBorder.style.mixBlendMode = "unset";
+                cursorBorder.style.setProperty("--size", "50px");   
+            });
+        });
+
+    </script>
 </body>
 </html>
