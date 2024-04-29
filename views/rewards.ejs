@@ -5,13 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rewards</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background-color: #18181B;
+            background-color: #131316 !important;
+            color: white;
+        }
+        .nav {
+            width: 90vw;
+            margin-left: 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;  
+            height: 15vh;  
+        }
+        .nav img {
+            height: 3vh;
+        }
+        .navIcons {
+            display: flex;
+            gap: 1.7vw;
+        }
+        .navIcon {
+            font-size: 2vw;
+        }
+        .header {
+            width: 88vw;
+            display: flex;
+            justify-content: space-between;
+            margin-left: 6vw;
+            margin-top: 2.5vh;
+        }
+        .blueRewards {
+            width: 52.8vw;
+        }
+        .blueRewards img {
+            width: 52.8vw;
+        }
+        .sideKeCards {
+            display: flex;
+            justify-content: space-between;
+            width: 30.2vw;
+            flex: 1;
+        }
+        .sideKaCard {
+            flex: 1;
+            background-color: #18181b;
         }
     </style>
 </head>
 <body>
     <%- include('./partials/cursor.ejs') %>
+    <div class="nav">
+        <img src="fullLogo.png">
+        <div class="navIcons">
+            <div class="navIcon"><i class="fas fa-user-circle"></i></div>
+            <div class="navIcon"><i class="far fa-bell"></i></div>
+        </div>
+    </div>
+    <div class="header">
+        <div class="blueRewards">
+            <img src="rewardsBanner.png">
+        </div>
+        <div class="sideKeCards">
+            <div class="sideKaCard"></div>
+            <div class="sideKaCard"></div>
+        </div>
+    </div>
 </body>
 </html>
