@@ -20,6 +20,8 @@ const express = require('express'),
     kycRouter = require('./routers/kycRouter'),
     rewardsRouter = require('./routers/rewardsRouter'),
     apiRouter = require('./routers/apiRouter')
+    kycRouter = require('./routers/kycRouter'),
+    rewardsRouter = require('./routers/rewardsRouter')
     
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
