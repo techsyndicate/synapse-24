@@ -8,7 +8,7 @@ const userSchema = new Schema({
     lname: reqString,
     email: reqString,
     password: reqString,
-    distance: {
+    points: {
         type: Number,
         required: true,
         default: 0
