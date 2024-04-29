@@ -1,7 +1,10 @@
 const router = require('express').Router()
+const axios = require('axios');
 
-router.get('/', (req, res) => {
+
+router.get('/', async (req, res) => {
     res.render('index')
+    
 })
 
 module.exports = router

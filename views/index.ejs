@@ -1,14 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="icon" type="image/png" href="logo.png">
-</head>
-<body>
-    <a href="/login" target="_blank">Login</a>
-    <a href="/register" target="_blank">Register</a>
-    <iframe src="https://maps.google.com/maps?q=india&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed" width=1000 height=700 allowfullscreen></iframe>
-</body>
-</html>
+ 
+
+
+  <html>
+    <head>
+      <title>Default Place Search</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Default Place Search">
+        <script>
+            const xhr = new XMLHttpRequest()
+            xhr.open("POST", "https://outpost.mappls.com/api/security/oauth/token")
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                // Typical action to be performed when the document is ready:
+                console.log(xhttp.responseText);
+                }
+            };
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+            const params = `grant_type=client_credentials&client_id=96dHZVzsAuuEphd7p8j-jX2ll5_BzdoW4qg4A2OkbTLZbNUNdFIBte7d_9fsw6Z1s6ecnAthtCeXe9izIJG1lC9gSRZeuoLo&client_secret=lrFxI-iSEg_8gOTqPB6XZUehH2siRvSh2i2mDMhD45acr5hrNDbuw8T6lF1b2tEZWponbbkTQc7w-ufvxHatuxz89O2lH16goEB-SfvyNfc=`
+            xhr.send(params)
+
+        </script>
+          <!-- <script src="https://apis.mappls.com/advancedmaps/api/d339fd18d35dfd465e2627a448632857/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+          <script src="https://apis.mappls.com/advancedmaps/api/d339fd18d35dfd465e2627a448632857/map_sdk_plugins?v=3.0"></script> -->
+          <style>
+          body {margin: 0}
+          #map {width: 100%;height: 100vh;margin: 0;padding: 0; }
+          #auto { width: 300px; position: absolute;z-index: 999;  font-size: 15px;  padding: 10px; border: 1px solid #ddd; outline: none !important;
+              top: 5px;border-radius: 10px;margin: 4px; }
+      </style>
+      </head>
+      <body>
+          <div id="map"></div>
+          <input type="text" id="auto" name="auto" class="search-outer form-control as-input" placeholder="Search places or eLoc's..." required="" spellcheck="false">
+              <script>
+          var map,marker;
+          /*Map Initialization*/
+          function initMap1(){
+              map = new mappls.Map('map', {
+                  center: [28.09, 78.3],
+                  zoom: 5
+              });
+              map.addListener('load',function(){
+                  var optional_config = {
+                      /* location: [28.61, 77.23], */
+                      region: "IND",
+                      height:300,
+                  };
+                  new mappls.search(document.getElementById("auto"), optional_config, callback);
+                  function callback(data) {
+                      console.log(data);
+                      if (data) {
+                          var dt = data[0];
+                          if (!dt) return false;
+                          var eloc = dt.eLoc;
+                          var place = dt.placeName + ", " + dt.placeAddress;
+                          /*Use elocMarker Plugin to add marker*/
+                          if (marker) marker.remove();
+                          mappls.pinMarker({
+                              map: map,
+                              pin: eloc,
+                              popupHtml: place,
+                              popupOptions: {
+                                  openPopup: true
+                              }
+                          }, function(data){
+                              marker=data;
+                              marker.fitbounds();
+                          })
+                      }
+                  }
+              });
+          }
+      </script>
+          </body>
+    </html>
+  
+  
+  
