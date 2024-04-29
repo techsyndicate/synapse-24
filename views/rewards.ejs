@@ -7,9 +7,13 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
         body {
             background-color: #131316 !important;
             color: white;
+            overflow-x: hidden;
         }
         .nav {
             width: 90vw;
@@ -38,6 +42,8 @@
         }
         .blueRewards {
             width: 52.8vw;
+            line-height: 0px;
+            font-size: 0px;
         }
         .blueRewards img {
             width: 52.8vw;
@@ -45,12 +51,73 @@
         .sideKeCards {
             display: flex;
             justify-content: space-between;
-            width: 30.2vw;
-            flex: 1;
+            width: 31.7vw;
+            flex-direction: column;
+            gap: 1vw;
         }
         .sideKaCard {
             flex: 1;
             background-color: #18181b;
+            border-radius: 23px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2vw;
+        }
+        .sideKaCard img {
+            height: 5vw;
+            margin-top: 1.1vw;
+        }
+        .sideKaCard p {
+            font-size: 4.5vw;
+            margin: 0px;
+        }
+        .redeem {
+            display: flex;
+            justify-content: space-between;
+            width: 88vw;
+            margin-left: 6vw;
+            margin-top: 3vw;
+            align-items: center;
+        }
+        .redeem p {
+            margin: 0px;
+            font-size: 2.7vw;
+        }
+        .scrollIcons {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            color: #ccc;
+        }
+        .scrollIcons i {
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .scrollIcons i:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .companiesGrid {
+            display: flex;
+            flex-wrap: wrap;
+            width: 193vw;
+            margin-left: 6vw;
+            gap: 3vw;
+            margin-top: 1.5vw;
+            margin-bottom: 1.5vw;
+        }
+        .companiesGridBox {
+            padding: 0.75vw;
+            background-color: #2A2A2A;
+            font-size: 0px;
+            line-height: 0px;
+            border-radius: 5px;
+        }
+        .companiesGridBox img {
+            width: 18.25vw;
+        }
+        .companiesGridContainer {
+            overflow: hidden;
         }
     </style>
 </head>
@@ -68,9 +135,70 @@
             <img src="rewardsBanner.png">
         </div>
         <div class="sideKeCards">
-            <div class="sideKaCard"></div>
-            <div class="sideKaCard"></div>
+            <div class="sideKaCard">
+                <img src="points.png">
+                <p><%= user.points %></p>
+            </div>
+            <div class="sideKaCard">
+                <img src="co2.png">
+                <p><%= user.carbonEmissions %></p>
+            </div>
         </div>
     </div>
+    <div class="redeem">
+        <p>Redeem</p>
+        <div class="scrollIcons">
+            <i class="fas fa-chevron-left" onclick="scrollToTheLeft()"></i>
+            <span id="scrollPageNumber">1</span>
+            <i class="fas fa-chevron-right" onclick="scrollToTheRight()"></i>
+        </div>
+    </div>
+    <div class="companiesGridContainer" id="companiesGridContainer">
+        <div class="companiesGrid">
+            <div class="companiesGridBox">
+                <img src="prime.png">
+            </div>
+            <div class="companiesGridBox">
+                <img src="netflix.png">
+            </div>
+            <div class="companiesGridBox">
+                <img src="spotify.png">
+            </div>
+            <div class="companiesGridBox">
+                <img src="fifa.png">
+            </div>
+            <div class="companiesGridBox" style="margin-left: 9vw;">
+                <img src="amazon.png">
+            </div>
+            <div class="companiesGridBox">
+                <img src="flipkart.png">
+            </div>
+            <div class="companiesGridBox">
+                <img src="roblox.png">
+            </div>
+            <div class="companiesGridBox">
+                <img src="adobe.png">
+            </div>
+        </div>
+    </div>
+    <script>
+        function scrollToTheRight() {
+            const div = document.getElementById('companiesGridContainer'),
+            scrollPosition = div.scrollWidth - div.clientWidth
+            div.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            })
+            document.getElementById('scrollPageNumber').innerHTML = '2'
+        }
+        function scrollToTheLeft() {
+            const div = document.getElementById('companiesGridContainer')
+            div.scrollTo({
+                left: 0,
+                behavior: 'smooth'
+            })
+            document.getElementById('scrollPageNumber').innerHTML = '1'
+        }
+    </script>
 </body>
 </html>
