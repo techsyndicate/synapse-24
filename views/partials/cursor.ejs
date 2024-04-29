@@ -1,11 +1,40 @@
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
     body {
         background-color: #18181B;
         font-family: 'Outfit';
         margin: 0px;
+        color: white;
+        overflow-x: hidden;
     }
     * {
         box-sizing: border-box;
     }
+    .nav {
+        width: 90vw;
+        margin-left: 5vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;  
+        height: 15vh;  
+    }
+    .nav img {
+        height: 3vh;
+    }
+    .navIcons {
+        display: flex;
+        gap: 1.7vw;
+    }
+    .navIcon {
+        font-size: 2vw;
+    }
 </style>
+<div class="nav">
+    <img src="fullLogo.png">
+    <div class="navIcons">
+        <div class="navIcon"><i class="fas fa-user-circle"></i></div>
+        <div class="navIcon"><i class="far fa-bell"></i></div>
+    </div>
+</div>
