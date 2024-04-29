@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+	<style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit';
+        }
+        body {
+            background-color: #131316 !important;
+            color: white;
+        }
+        .nav {
+            width: 90vw;
+            margin-left: 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;  
+            height: 15vh;  
+        }
+        .nav img {
+            height: 3vh;
+        }
+        .navIcons {
+            display: flex;
+            gap: 1.7vw;
+        }
+        .navIcon {
+            font-size: 2vw;
+        }
+        
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 1.5vw;
+            /* height: 100%; */
+            /* background-color: red; */
+        }
+        .headings {
+            align-self: flex-start;
+        }
+        .main-heading {
+            margin-left: 9.5vw;
+            align-self: flex-start;
+            color: #466EFF;
+            font-size: 2.5vw;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+        }
+        .main-para {
+            margin-left: 9.5vw;
+            align-self: flex-start;
+        }
+        .vid-div {
+            display: flex;
+            flex-direction: column;
+            
+            width: fit-content;
+            height: fit-content;
+            position: relative;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .vid-div > p{
+            z-index: 100;
+            position: absolute;
+            top: 1vw;
+            left: 1vw;
+        }
+        video, canvas {
+            border-radius: 14px;
+            width: 80vw;
+            height: 60vh;
+            object-fit: cover;
+            pointer-events: none;
+        }
+        button {
+            width: 7vw;
+            height: 4.63vh;
+            /* padding: 1vh 0; */
+            border-radius: 10px;
+            background: #466EFF;
+            color: #fff;
+            outline: none;
+            border: none;
+            font-size: 1vw;
+            cursor: pointer;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1vw;
+        }
+        .take {
+            width: 9vw;
+            color: #466EFF;
+            background: #fff;
+        }
+        #buttons {
+            display: none;
+        }
+        </style>
+</head>
+
+<body>
+    <div class="nav">
+        <img src="fullLogo.png">
+        <div class="navIcons">
+            <div class="navIcon"><i class="fas fa-user-circle"></i></div>
+            <div class="navIcon"><i class="far fa-bell"></i></div>
+        </div>
+    </div>
+    <main>
+        <div class="headings">
+            <h1 class="main-heading" >KYC</h1>
+            <p class="main-para" >Verify your identity</p>
+        </div>
+        <div class="vid-div">
+            <p id="vid-p">Smile :)</p>
+            <video id="player" autoplay></video>
+            <canvas id="canvas" width="320" height="240"></canvas>
+        </div>
+        <div id="second-buttons" class="buttons">
+            <button id="capture">Capture</button>
+            <!-- <button class="take">Take another</button> -->
+        </div>
+        <!-- <img id="photo" alt="The screen capture will appear in this box."> -->
+        <div id="buttons" class="buttons">
+            <form action="/kyc/uploadKYC" method="post">
+                <input name="kycImage" id="input" type="hidden">
+                <button>Submit</button>
+            </form>
+            <button onclick="window.location.reload()" class="take">Take another</button>
+        </div>
+    </main>
+<script>
+  const player = document.getElementById('player');
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
+  const vidP = document.getElementById('vid-p')
+  const buttons = document.getElementById('buttons')
+  const secondButtons = document.getElementById('second-buttons')
+  const captureButton = document.getElementById('capture');
+
+  const input = document.getElementById('input')
+
+  const constraints = {
+    video: true,
+  };
+
+  captureButton.addEventListener('click', () => {
+    // Draw the video frame to the canvas.
+    context.drawImage(player, 0, 0, canvas.width, canvas.height);
+    vidP.innerText = "Captured Photo"
+    // player.style.visibility = "hidden"
+    // player.parentElement.removeChild()
+    // player.srcObject = none
+    secondButtons.style.display = "none"
+    buttons.style.display = "flex"
+    var data = canvas.toDataURL('image/png');
+    // console.log(data)
+    input.setAttribute('value', data)
+    console.log(input.value)
+    constraints.video = false
+  });
+  navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+    player.srcObject = stream;
+  });
+</script>
+
+</html>
