@@ -3,8 +3,8 @@ const axios = require('axios');
 
 
 router.get('/', async (req, res) => {
-    res.render('index')
-    
+    if (!req.user) return res.redirect('/login')
+    res.render('index', {user: req.user})
 })
 
 module.exports = router

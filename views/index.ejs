@@ -6,14 +6,135 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        .main {
+            width: 85vw;
+            margin-left: 7.5vw;
+            margin-top: 3vw;
+            display: flex;
+            justify-content: space-between;
+            gap: 6vw;
+        }
+        .left {
+            width: 37vw;
+            flex-grow: 1;
+        }
+        .left h1 {
+            font-weight: 600;
+            margin: 0px;
+            font-size: 2.7vw;
+        }
+        .blueText {
+            color: #466eff
+        }
+        .locationNameInitialP {
+            margin: 0px;
+            margin-top: 0.7vw;
+        }
+        #locationNameInitial {
+            font-size: 1.1vw;
+        }
+        .locationNameInitialP i {
+            font-size: 1.3vw;
+        }
+        .searchFull {
+            position: relative;
+            width: 100%;
+            margin-top: 1.5vw;
+        }
+        .searchResults {
+            background: #18181b;
+            padding-top: 4.1vw;
+            border-radius: 1vw;
+            padding-bottom: 0.75vw;
+        }
+        .searchResult {
+            font-size: 1.1vw;
+            display: flex;
+            align-items: flex-end;
+            padding-left: 4vw;
+            padding-top: 0.75vw;
+            padding-bottom: 0.75vw;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .searchResult:hover {
+            background-color: #212121;
+        }
+        .inputContainer {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+        .searchIconContainer {
+            width: 4vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            line-height: 0px;
+        }
+        .inputContainer input {
+            width: 100%;
+            padding: 1.4vw;
+            padding-left: 4vw;
+            border-radius: 1vw;
+            background-color: #212122;
+            border: none;
+            outline: none;
+            color: white;
+            font-family: 'Outfit';
+            font-size: 1.1vw;
+        }
+        #map {
+            width: 37vw !important;
+            flex-grow: 1;
+            border: 1px solid white;
+            border-radius: 2vw;
+        }
+    </style>
 </head>
 <body>
     <%- include('./partials/cursor.ejs') %>
-    <input type="text" oninput="getLocationCoordinates(this.value)">
-    <div id="map" style="height: 400px;"></div>
+    <div class="main">
+        <div class="left">
+            <h1><span class="blueText">Hello&nbsp;</span><%= user.fname %>!</h1>
+            <p class="locationNameInitialP"><i class="fas fa-map-marker-alt blueText"></i> &nbsp;&nbsp;<span id="locationNameInitial"></span></p>
+            <h1 style="font-size: 3vw; margin-top: 2vw;">Where would you like to go today?</h1>
+            <div class="searchFull">
+                <div class="inputContainer">
+                    <div class="searchIconContainer">
+                        <i class="blueText searchIcon fas fa-search"></i>
+                    </div>
+                    <input type="text" placeholder="Search Places..." oninput="handleSearch(event)" id="searchPlaces">
+                </div>
+                <div class="searchResults">
+                    <div class="searchResult" style="margin-top: 0.75vw;" onclick="processLocation('searchResult0')"><span style="visibility: hidden;">.</span><span id="searchResult0"></span></div>
+                    <div class="searchResult" onclick="processLocation('searchResult1')"><span style="visibility: hidden;">.</span><span id="searchResult1"></span></div>
+                    <div class="searchResult" onclick="processLocation('searchResult2')"><span style="visibility: hidden;">.</span><span id="searchResult2"></span></div>
+                    <div class="searchResult" onclick="processLocation('searchResult3')"><span style="visibility: hidden;">.</span><span id="searchResult3"></span></div>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+    </div>
 
     <script>
-        var selectedLocation = false 
+        var selectedLocation = false
+        var map, marker, redMarker 
+        const typingKaTimeout = 500
+        let typingTimer;
+        function handleSearch(e) {
+            clearTimeout(typingTimer)
+            typingTimer = setTimeout(() => {
+                getLocationCoordinates(e.target.value)
+            }, typingKaTimeout)
+        }
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
@@ -22,8 +143,9 @@
             }
         }
 
-        function showPosition(position) {
-            var redMarker = L.icon({
+        async function showPosition(position) {
+            getLocationName(position.coords.latitude, position.coords.longitude, true)
+            redMarker = L.icon({
                 iconUrl: '/marker.png',
                 iconSize: [80, 80],
                 iconAnchor: [40, 40],
@@ -31,14 +153,13 @@
                 shadowSize: [41, 41]
             });
             console.log('called')
-            var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+            map = L.map('map', {zoomControl: false, attributionControl: false}).setView([position.coords.latitude, position.coords.longitude], 15);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                 subdomains: 'abcd',
                 maxZoom: 19
             }).addTo(map);
-            var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
+            marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
             selectedLocation = true
-            getLocationName(position.coords.latitude, position.coords.longitude)
 
             map.on('click', function(e) {
                 marker.remove()
@@ -52,7 +173,7 @@
         }
         getLocation()
 
-        function getLocationName(lat, lng) {
+        function getLocationName(lat, lng, isInit) {
             const latitude = lat;
             const longitude = lng;
             const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
@@ -60,14 +181,21 @@
             .then(response => response.json())
             .then(data => {
                 const locationName = data.display_name;
-                console.log('Location:', locationName);
+                console.log(locationName)
+                if (isInit) {
+                    document.getElementById('locationNameInitial').innerHTML = locationName
+                } else {
+                    console.log('called')
+                    document.getElementById('searchPlaces').value = locationName
+                    getLocationCoordinates(locationName)
+                }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.log('error', error)
             });
         }
 
-        function getLocationCoordinates(search) {
+        function getLocationCoordinates(search, isFromSearchResult) {
             const locationName = search;
             const apiUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName)}`;
             fetch(apiUrl)
@@ -75,18 +203,37 @@
             .then(data => {
                 console.log(data)
                 if (data.length > 0) {
-                const latitude = data[0].lat;
-                const longitude = data[0].lon;
-                console.log('Coordinates:', latitude, longitude);
+                    const latitude = data[0].lat;
+                    const longitude = data[0].lon;
+                    if (isFromSearchResult) {
+                        processLocationFinal(latitude, longitude)
+                    }
+                    for (let i = 0; i < data.length; i++) {
+                        if (i >= 4) break
+                        document.getElementById(`searchResult${i}`).innerHTML = data[i].display_name
+                    }
                 } else {
-                console.log('Location not found');
+                    console.log('Location not found');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
-
+        function processLocation(id) {
+            const locationStr = document.getElementById(id).innerHTML
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            getLocationCoordinates(locationStr, true)
+        }
+        function processLocationFinal(lat, long) {
+            marker = L.marker([lat, long], {icon: redMarker}).addTo(map);
+            map.setView([lat, long], 15)
+            console.log(marker)
+        }
   </script>
 </body>
 </html>
