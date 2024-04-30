@@ -47,7 +47,6 @@ router.post('/', async (req, res) => {
         }
     }
     for (let j = 0; j < 20; j++) {
-        console.log(chars[Math.floor(Math.random() * 62)])
         myNewRideId += chars[Math.floor(Math.random() * 62)]
     }
     const otp = Math.floor(Math.random() * 10000).toString()
