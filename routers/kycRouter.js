@@ -4,9 +4,6 @@ const Driver = require('../schemas/driverSchema')
 
 
 router.get('/', async (req, res) => {
-    if (req.user.type != "Driver" || req.user.type != "driver") {
-        return res.redirect("/")
-    }
     res.render('kyc')
 })
 
