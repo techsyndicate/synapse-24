@@ -174,15 +174,6 @@
     // Draw the video frame to the canvas.
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
     vidP.innerText = "Captured Photo"
-    // player.style.visibility = "hidden"
-    // player.parentElement.removeChild()
-    // player.srcObject = none
-    secondButtons.style.display = "none"
-    buttons.style.display = "flex"
-    var data = canvas.toDataURL('image/png');
-    // console.log(data)
-    input.setAttribute('value', data)
-    console.log(input.value)
     constraints.video = false
   });
   navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
