@@ -151,6 +151,7 @@
     <script>
         var selectedLocation = false
         var map, marker, redMarker 
+        var myFinalHomeLocation
         const typingKaTimeout = 500
         let typingTimer;
         function handleSearch(e) {
@@ -217,10 +218,10 @@
             fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                const locationName = data.display_name;
-                console.log(locationName)
+                myFinalHomeLocation = data.display_name;
+                console.log(myFinalHomeLocation)
                 if (isInit) {
-                    document.getElementById('locationNameInitial').innerHTML = locationName
+                    document.getElementById('locationNameInitial').innerHTML = myFinalHomeLocation
                 }
             })
             .catch(error => {
@@ -288,6 +289,7 @@
                 const inputThree = document.createElement('input')
                 const inputFour = document.createElement('input')
                 const inputFive = document.createElement('input')
+                const inputSix = document.createElement('input')
                 inputOne.setAttribute('name', 'location')
                 inputOne.value = locationName
                 inputTwo.setAttribute('name', 'latitude')
@@ -298,11 +300,14 @@
                 inputFour.value = position.coords.longitude
                 inputFive.setAttribute('name', 'myLatitude')
                 inputFive.value = position.coords.latitude
+                inputSix.setAttribute('name', 'myFinalHomeLocation')
+                inputSix.value = myFinalHomeLocation
                 formElement.appendChild(inputOne)
                 formElement.appendChild(inputTwo)
                 formElement.appendChild(inputThree)
                 formElement.appendChild(inputFour)
                 formElement.appendChild(inputFive)
+                formElement.appendChild(inputSix)
                 formElement.setAttribute('method', 'POST')
                 formElement.setAttribute('action', '')
                 formElement.style.display = 'none'

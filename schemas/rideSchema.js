@@ -14,6 +14,10 @@ const driverSchema = new Schema({
         type: Array,
         required: true
     },
+    myLocation: {
+        type: Array,
+        required: true
+    },
     vehicle: reqString,
     rideId: reqString,
     price: {
@@ -21,7 +25,15 @@ const driverSchema = new Schema({
         required: true,
         default: []
     },
-    otp: reqString
+    otp: reqString,
+    distance: {
+        type: Array,
+        required: true
+    },
+    time: {
+        type: Array,
+        required: true
+    }
 })
 
 module.exports = mongoose.model("Ride", driverSchema)
