@@ -245,11 +245,11 @@
                                 <p><%= user.fname + ' ' + user.lname %></p>
                             </div>
                             <div class="times">
-                                <p class="special">Time</p>
+                                <p class="special"><%= ride.time %> min</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" viewBox="0 0 3 3" fill="none">
                                     <circle cx="1.5" cy="1.5" r="1.5" fill="white" fill-opacity="0.3"/>
                                 </svg>
-                                <p class="special">Distance</p>
+                                <p class="special"><%= ride.distance %> km</p>
                             </div>
                             <div class="buttons">
                                 <button style="color: #000; background-color: #53FAAA;">Auto</button>
@@ -263,7 +263,7 @@
                         <div class="points">
                             <div class="pickup">
                                 <p class="unspecial">Pickup</p>
-                                <p style="width: 10vw; word-wrap: break-word;">Pickup Address</p>
+                                <p style="width: 10vw; word-wrap: break-word;"><%= ride.myLocation %></p>
                             </div>
                             <div class="dropoff">
                                 <p class="unspecial">Dropoff</p>
@@ -274,24 +274,14 @@
                 </div>
                 <div class="bottom">
                     <div class="maindiv">
-                        <h1>Other <span style="color: #466EFF;">Riders</span> <span style="color: rgba(244, 244, 244, 0.25);">(4)</span></h1>
+                        <h1>Grouped <span style="color: #466EFF;">Riders</span> <span style="color: rgba(244, 244, 244, 0.25);">(<%= ride.riders.length %>)</span></h1>
                         <div class="riders">
+                            <% for (let i = 0; i < ride.riders.length; i++) { %>
                             <div class="rider">
                                 <img class="pfp-2" src="/person2.png" class="person-2" alt="">
-                                <p>Harry Brown</p>
+                                <p><%= ride.riders[i] %></p>
                             </div>
-                            <div class="rider">
-                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
-                                <p>Harry Brown</p>
-                            </div>
-                            <div class="rider">
-                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
-                                <p>Harry Brown</p>
-                            </div>
-                            <div class="rider">
-                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
-                                <p>Harry Brown</p>
-                            </div>
+                            <% } %>
                         </div>
                     </div>
                     <form action="" method="post">

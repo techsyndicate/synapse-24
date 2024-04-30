@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     if (!req.user) return res.redirect('/login')
-    const {location, latitude, longitude, myLatitude, myLongitude} = req.body
+    const {location, latitude, longitude, myLatitude, myLongitude, myFinalHomeLocation} = req.body
     function getFare(lat1, lon1, lat2, lon2) {
         const earthRadius = 6371;
         const degToRad = (angle) => angle * (Math.PI / 180);
@@ -24,7 +24,9 @@ router.post('/', async (req, res) => {
                 Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = earthRadius * c;
-        return (20 + (12.5 * distance)).toFixed(2);
+
+        const timeTaken = Math.round((distance / 45) * 60)
+        return [(50 + (12.5 * distance)).toFixed(2), distance.toFixed(2), timeTaken];
     }
     const allDrivers = await Users.findOne({type: 'Driver', status: 'free'})
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
@@ -40,18 +42,27 @@ router.post('/', async (req, res) => {
         } else {
             const newPeople = currentRides[i].riders,
                 currentLocations = currentRides[i].location,
-                currentPrices = currentRides[i].price
+                currentPrices = currentRides[i].price,
+                currentDistances = currentRides[i].distance,
+                currentMyLocations = currentRides[i].myLocation,
+                currentTimes = currentRides[i].time
             if (newPeople.includes(req.user.email)) {
                 return res.redirect('/')
             };
             newPeople.push(req.user.email)
             currentLocations.push(location)
-            currentPrices.push(getFare(latitude, longitude, myLatitude, myLongitude))
+            currentPrices.push(getFare(latitude, longitude, myLatitude, myLongitude)[0])
+            currentMyLocations.push(myFinalHomeLocation)
+            currentDistances.push(getFare(latitude, longitude, myLatitude, myLongitude)[1])
+            currentTimes.push(getFare(latitude, longitude, myLatitude, myLongitude)[2])
             await Rides.updateOne({rideId: currentRides[i].rideId}, {
                 $set: {
                     riders: newPeople,
                     location: currentLocations,
-                    price: currentPrices
+                    price: currentPrices,
+                    myLocation: currentMyLocations,
+                    distance: currentDistances,
+                    time: currentTimes
                 }
             })
             await Users.updateOne({email: req.user.email}, {
@@ -75,7 +86,10 @@ router.post('/', async (req, res) => {
         vehicle: 'auto',
         otp: finalOtp,
         rideId: myNewRideId,
-        price: [getFare(latitude, longitude, myLatitude, myLongitude)]
+        price: [getFare(latitude, longitude, myLatitude, myLongitude)[0]],
+        distance: [getFare(latitude, longitude, myLatitude, myLongitude)[1]],
+        myLocation: [myFinalHomeLocation],
+        time: [getFare(latitude, longitude, myLatitude, myLongitude)[2]]
     })
     await newRide.save()
     await Users.updateOne({email: req.user.email}, {
