@@ -18,6 +18,7 @@
         .left {
             width: 37vw;
             flex-grow: 1;
+            transform: translateY(5.5vw);
         }
         .left h1 {
             font-weight: 600;
@@ -47,6 +48,7 @@
             padding-top: 4.1vw;
             border-radius: 1vw;
             padding-bottom: 0.75vw;
+            visibility: hidden;
         }
         .searchResult {
             font-size: 1.1vw;
@@ -97,12 +99,34 @@
             border: 1px solid white;
             border-radius: 2vw;
         }
+        .popupBtn {
+            border: 2px solid black;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 50px;
+            background-color: #18181b;
+            color: white;
+            padding: 1vw;
+        }
+        .popupBtn:hover {
+            background-color: black;
+        }
+        .leaflet-popup-content-wrapper {
+            background-color: #466eff;
+        }
+        .leaflet-popup-tip {
+            background-color: #466eff;
+        }
+        .leaflet-popup-close-button {
+            color: black !important;
+        }
     </style>
 </head>
 <body>
     <%- include('./partials/cursor.ejs') %>
     <div class="main">
-        <div class="left">
+        <div class="left" id="left">
             <h1><span class="blueText">Hello&nbsp;</span><%= user.fname %>!</h1>
             <p class="locationNameInitialP"><i class="fas fa-map-marker-alt blueText"></i> &nbsp;&nbsp;<span id="locationNameInitial"></span></p>
             <h1 style="font-size: 3vw; margin-top: 2vw;">Where would you like to go today?</h1>
@@ -113,7 +137,7 @@
                     </div>
                     <input type="text" placeholder="Search Places..." oninput="handleSearch(event)" id="searchPlaces">
                 </div>
-                <div class="searchResults">
+                <div class="searchResults" id="searchResultsKaContainer">
                     <div class="searchResult" style="margin-top: 0.75vw;" onclick="processLocation('searchResult0')"><span style="visibility: hidden;">.</span><span id="searchResult0"></span></div>
                     <div class="searchResult" onclick="processLocation('searchResult1')"><span style="visibility: hidden;">.</span><span id="searchResult1"></span></div>
                     <div class="searchResult" onclick="processLocation('searchResult2')"><span style="visibility: hidden;">.</span><span id="searchResult2"></span></div>
@@ -159,16 +183,29 @@
                 maxZoom: 19
             }).addTo(map);
             marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
+            marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='handleSubmission()'>Select</p>").openPopup();
             selectedLocation = true
 
             map.on('click', function(e) {
-                marker.remove()
-                var lat = e.latlng.lat;
-                var lng = e.latlng.lng;
-                console.log('Selected location:', lat, lng);
-                marker = L.marker([lat, lng], {icon: redMarker}).addTo(map);
-                selectedLocation = true
-                getLocationName(lat, lng)
+                const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`;
+                fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const locationName = data.display_name;
+                    console.log(locationName)
+                    console.log('called')
+                    document.getElementById('searchPlaces').value = locationName
+                    if (data.address.country != 'India') {
+                        alert('Sorry, we are currently not providing services outside India.')
+                    } else {
+                        marker.remove()
+                        marker = L.marker([e.latlng.lat, e.latlng.lng], {icon: redMarker}).addTo(map);
+                        marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='handleSubmission()'>Select</p>").openPopup();
+                        selectedLocation = true
+                        document.getElementById('searchPlaces').value = locationName
+                        getLocationCoordinates(locationName)
+                    }
+                })
             });
         }
         getLocation()
@@ -184,10 +221,6 @@
                 console.log(locationName)
                 if (isInit) {
                     document.getElementById('locationNameInitial').innerHTML = locationName
-                } else {
-                    console.log('called')
-                    document.getElementById('searchPlaces').value = locationName
-                    getLocationCoordinates(locationName)
                 }
             })
             .catch(error => {
@@ -208,6 +241,8 @@
                     if (isFromSearchResult) {
                         processLocationFinal(latitude, longitude)
                     }
+                    document.getElementById('left').style.transform = 'translate(0px)'
+                    document.getElementById('searchResultsKaContainer').style.visibility = 'visible'
                     for (let i = 0; i < data.length; i++) {
                         if (i >= 4) break
                         document.getElementById(`searchResult${i}`).innerHTML = data[i].display_name
@@ -222,17 +257,44 @@
         }
         function processLocation(id) {
             const locationStr = document.getElementById(id).innerHTML
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
             getLocationCoordinates(locationStr, true)
         }
         function processLocationFinal(lat, long) {
-            marker = L.marker([lat, long], {icon: redMarker}).addTo(map);
-            map.setView([lat, long], 15)
-            console.log(marker)
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${long}`;
+                fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const locationName = data.display_name;
+                    if (data.address.country != 'India') {
+                        alert('Sorry, we are currently not providing services outside India.')
+                    } else {
+                        marker.remove()
+                        marker = L.marker([lat, long], {icon: redMarker}).addTo(map);
+                        marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='handleSubmission()'>Select</p>").openPopup();
+                        map.setView([lat, long], 15)
+                    }
+                })
+        }
+        function handleSubmission() {
+            const {lat, lng} = marker.getLatLng()
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const locationName = data.display_name;
+                const formElement = document.createElement('form')
+                const inputOne = document.createElement('input')
+                inputOne.setAttribute('name', 'location')
+                inputOne.value = locationName
+                formElement.appendChild(inputOne)
+                formElement.setAttribute('method', 'POST')
+                formElement.setAttribute('action', '')
+                document.body.appendChild(formElement)
+                formElement.submit()
+            })
+            .catch(error => {
+                console.log('error', error)
+            });
         }
   </script>
 </body>

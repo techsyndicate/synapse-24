@@ -27,6 +27,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
         default: "User"
+    },
+    status: {
+        type: String,
+        required: true,
+        default: "free"
     }
 })
 
