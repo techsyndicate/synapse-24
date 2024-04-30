@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
                 Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = earthRadius * c;
-        return (50 + (12.5 * distance)).toFixed(2);
+        return (20 + (12.5 * distance)).toFixed(2);
     }
     const allDrivers = await Users.findOne({type: 'Driver', status: 'free'})
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
