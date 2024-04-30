@@ -224,6 +224,29 @@
             justify-content: center;
             gap: 0.5vw;
         }
+        .otpContainer {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 999999;
+            width: 15vw;
+            padding: 1vw;
+            text-align: center;
+        }
+        .otpContainer p {
+            margin: 0.8vw 0;
+            text-align: center;
+            font-size: 1.1vw;
+        }
+        .otpContainer div {
+            border: 2px solid #466EFF;
+            border-radius: 2px;
+            display: inline;
+            margin-right: 0.5vw;
+            padding: 0px 0.7vw;
+            font-size: 1.6vw;
+        }
     </style>
 </head>
 <body>
@@ -235,7 +258,9 @@
     </div>
     <main class="main">
         <div class="container">
-            <div id="map"></div>
+            <div id="map" style="position: relative">
+                <div class="otpContainer"></div>
+            </div>
             <div class="right">
                 <div class="top">
                     <div class="creds">
@@ -317,6 +342,25 @@
                 subdomains: 'abcd',
                 maxZoom: 19
             }).addTo(map);
+            const mapContainer = document.querySelector('.leaflet-container')
+            const customOverlay = document.createElement('div'),
+                otp1 = document.createElement('div'),
+                otp2 = document.createElement('div'),
+                otp3 = document.createElement('div'),
+                otp4 = document.createElement('div'),
+                overlayP = document.createElement('p')
+            customOverlay.className = 'otpContainer'
+            otp1.innerHTML = '<%= ride.otp[0] %>'
+            otp2.innerHTML = '<%= ride.otp[1] %>'
+            otp3.innerHTML = '<%= ride.otp[2] %>'
+            otp4.innerHTML = '<%= ride.otp[3] %>'
+            overlayP.innerHTML = 'OTP for this ride'
+            customOverlay.appendChild(overlayP)
+            customOverlay.appendChild(otp1)
+            customOverlay.appendChild(otp2)
+            customOverlay.appendChild(otp3)
+            customOverlay.appendChild(otp4)
+            mapContainer.appendChild(customOverlay)
             var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
             selectedLocation = true
             getLocationName(position.coords.latitude, position.coords.longitude)

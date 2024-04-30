@@ -12,17 +12,18 @@ router.get('/', async (req, res) => {
             myRide.price = foundRides[i].price[overallIndex]
             myRide.distance = foundRides[i].distance[overallIndex]
             myRide.time = foundRides[i].time[overallIndex]
+            myRide.otp = foundRides[i].otp
             for (let k = 0; k < foundRides[i].riders.length; k++) {
                 const theFoundUser = await User.findOne({email: foundRides[i].riders[k]})
                 myRide.riders.push(`${theFoundUser.fname} ${theFoundUser.lname}`)
             }
-            if (foundRides[i].location[overallIndex].length > 32) {
-                myRide.dropOff = foundRides[i].location[overallIndex].substring(0, 32) + '...'
+            if (foundRides[i].location[overallIndex].length > 20) {
+                myRide.dropOff = foundRides[i].location[overallIndex].substring(0, 20) + '...'
             } else {
                 myRide.dropOff = foundRides[i].location[overallIndex]
             }
-            if (foundRides[i].myLocation[overallIndex].length > 32) {
-                myRide.myLocation = foundRides[i].myLocation[overallIndex].substring(0, 32) + '...'
+            if (foundRides[i].myLocation[overallIndex].length > 20) {
+                myRide.myLocation = foundRides[i].myLocation[overallIndex].substring(0, 20) + '...'
             } else {
                 myRide.myLocation = foundRides[i].myLocation[overallIndex]
             }
