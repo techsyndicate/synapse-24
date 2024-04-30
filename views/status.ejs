@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Outfit;
+        }
+        .headings {
+            margin-left: 10vw;
+            margin-top: 4vh;
+        }
+        .headings > h1 {
+            font-size: 2.5vw;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+        }
+        main {
+            width: 100vw;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5vw;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 80vw;
+            height: 57vh;
+            gap: 3vw;
+        }
+        #map {
+            width: 57.5vw;
+            height: 57.5vh;
+            border: 1px #fff solid;
+            border-radius: 14px;
+        }
+        .right {
+            z-index: 1000;
+            width: 20vw;
+            height: 57.5vh;
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .top {
+            width: 100%;
+            height: 32vh;
+            background: #18181b;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .bottom {
+            width: 100%;
+            height: 23vh;
+            /* background: #18181b; */
+            border-radius: 14px;
+            gap: 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .maindiv {
+            width: 100%;
+            height: 80%;
+            background: #18181b;
+            border-radius: 14px;
+            padding: 0.7vw;
+
+            display: flex;
+            flex-direction: column;
+            /* align-items: s; */
+            justify-content: space-evenly;
+
+        }
+        .cancel {
+            width: 20vw;
+            background: #53FAAA;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .creds {
+            /* margin-top: 2vh; */
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-around;
+        }
+        .names {
+            gap: 0.5vh;
+            margin-left: -1.5vw;
+            display: flex;
+            flex-direction: column;
+            /* width: ; */
+            align-items: flex-start;
+            justify-content: space-between;
+
+        }
+        .headings2 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5vw;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0.6vw;
+            margin-top: 0.5vh;
+        }
+        button {
+            border-radius: 5px;
+            /* text-align: center; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 3vw;
+            height: 3vh;
+            outline: none;
+            border: none;
+            cursor: pointer;
+        }
+        .times {
+            gap: 0.6vw;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .location {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 1vw;
+        }
+        .points {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 64%;
+        }
+        .image {
+            height: 13.6vh;
+            /* width: 1.4vw; */
+        }
+        .unspecial {
+            color: rgba(255, 255, 255, 0.26);
+            font-family: Outfit;
+            font-size: 1.9vh;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+        p {
+            color: #FFF;
+            font-family: Outfit;
+            font-size: 1.9vh;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+        .special {
+            color: #53FAAA;
+        }
+        .pfp-2 {
+            width: 1.7vw;
+            aspect-ratio: 1;
+        }
+        .maindiv > h1 {
+            color: #FFF;
+            font-family: Outfit;
+            font-size: 1.25vw;
+            font-style: normal;
+            font-weight: 400;
+            margin-left: 0.75vw;
+            line-height: normal;
+        }
+        .riders {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            gap: 0.5vw;
+            flex-wrap: wrap;
+            width: 100%;
+            height: 100%;
+            margin-top: 0.5vw;
+        }
+        .rider {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5vw;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/cursor.ejs') %>
+    <!-- <input type="text" oninput="getLocationCoordinates(this.value)"> -->
+    <div class="headings">
+        <h1><span style="color: #466EFF;">Ride</span> Status</h1>
+        <p>Find the answers to your questions</p>
+    </div>
+    <main class="main">
+        <div class="container">
+            <div id="map"></div>
+            <div class="right">
+                <div class="top">
+                    <div class="creds">
+                        <img src="/person1.png" class="pfp" alt="">
+                        <div class="names">
+                            <div class="headings2">
+                                <p>User's name</p>
+                            </div>
+                            <div class="times">
+                                <p class="special">Time</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" viewBox="0 0 3 3" fill="none">
+                                    <circle cx="1.5" cy="1.5" r="1.5" fill="white" fill-opacity="0.3"/>
+                                </svg>
+                                <p class="special">Distance</p>
+                            </div>
+                            <div class="buttons">
+                                <button style="color: #000; background-color: #53FAAA;">Auto</button>
+                                <button style="color: #fff; background-color: #212122;">Bus</button>
+                            </div>
+                        </div>
+                        <p>Price</p>
+                    </div>
+                    <div class="location">
+                        <img class="image" src="https://cdn.discordapp.com/attachments/1138112410209759312/1234856824868704387/image.png?ex=66324189&is=6630f009&hm=406eb941815868269b6f5f8e154600a0e899463bfa98d6cde65282e0893e997e&" class="waypoint" alt="">
+                        <div class="points">
+                            <div class="pickup">
+                                <p class="unspecial">Pickup</p>
+                                <p style="width: 10vw; word-wrap: break-word;">Pickup Address</p>
+                            </div>
+                            <div class="dropoff">
+                                <p class="unspecial">Dropoff</p>
+                                <p style="width: 10vw; word-wrap: break-word;">Dropoff Address</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="maindiv">
+                        <h1>Other <span style="color: #466EFF;">Riders</span> <span style="color: rgba(244, 244, 244, 0.25);">(4)</span></h1>
+                        <div class="riders">
+                            <div class="rider">
+                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
+                                <p>Harry Brown</p>
+                            </div>
+                            <div class="rider">
+                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
+                                <p>Harry Brown</p>
+                            </div>
+                            <div class="rider">
+                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
+                                <p>Harry Brown</p>
+                            </div>
+                            <div class="rider">
+                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
+                                <p>Harry Brown</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="" method="post">
+                        <button class="cancel">
+                            Cancel Ride
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        var selectedLocation = false 
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+        
+        function showPosition(position) {
+            var redMarker = L.icon({
+                iconUrl: '/marker.png',
+                iconSize: [80, 80],
+                iconAnchor: [40, 40],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            console.log('called')
+            var map = L.map('map', {zoomControl: false, attributionControl: false}).setView([position.coords.latitude, position.coords.longitude], 16);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+            var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
+            selectedLocation = true
+            getLocationName(position.coords.latitude, position.coords.longitude)
+            
+            map.on('click', function(e) {
+                marker.remove()
+                var lat = e.latlng.lat;
+                var lng = e.latlng.lng;
+                console.log('Selected location:', lat, lng);
+                marker = L.marker([lat, lng], {icon: redMarker}).addTo(map);
+                selectedLocation = true
+                getLocationName(lat, lng)
+            });
+        }
+        
+        function getLocationName(lat, lng) {
+            const latitude = lat;
+            const longitude = lng;
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const locationName = data.display_name;
+                console.log('Location:', locationName);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        function getLocationCoordinates(search) {
+            const locationName = search;
+            const apiUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName)}`;
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.length > 0) {
+                    const latitude = data[0].lat;
+                    const longitude = data[0].lon;
+                    console.log('Coordinates:', latitude, longitude);
+                } else {
+                    console.log('Location not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        getLocation()
+
+        </script>
+</body>
+</html>
