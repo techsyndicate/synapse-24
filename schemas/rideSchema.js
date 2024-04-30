@@ -16,6 +16,11 @@ const driverSchema = new Schema({
     },
     vehicle: reqString,
     rideId: reqString,
+    price: {
+        type: Array,
+        required: true,
+        default: []
+    },
     otp: reqString
 })
 

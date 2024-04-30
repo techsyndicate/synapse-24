@@ -183,7 +183,7 @@
                 maxZoom: 19
             }).addTo(map);
             marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
-            marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='handleSubmission()'>Select</p>").openPopup();
+            marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='navigator.geolocation.getCurrentPosition(handleSubmission);'>Select</p>").openPopup();
             selectedLocation = true
 
             map.on('click', function(e) {
@@ -200,7 +200,7 @@
                     } else {
                         marker.remove()
                         marker = L.marker([e.latlng.lat, e.latlng.lng], {icon: redMarker}).addTo(map);
-                        marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='handleSubmission()'>Select</p>").openPopup();
+                        marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='navigator.geolocation.getCurrentPosition(handleSubmission);'>Select</p>").openPopup();
                         selectedLocation = true
                         document.getElementById('searchPlaces').value = locationName
                         getLocationCoordinates(locationName)
@@ -270,12 +270,12 @@
                     } else {
                         marker.remove()
                         marker = L.marker([lat, long], {icon: redMarker}).addTo(map);
-                        marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='handleSubmission()'>Select</p>").openPopup();
+                        marker.bindPopup("<p style='font-family: outfit; font-size: 1.2vw; color: black; cursor: pointer;' onclick='navigator.geolocation.getCurrentPosition(handleSubmission)'>Select</p>").openPopup();
                         map.setView([lat, long], 15)
                     }
                 })
         }
-        function handleSubmission() {
+        function handleSubmission(position) {
             const {lat, lng} = marker.getLatLng()
             const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
             fetch(apiUrl)
@@ -284,11 +284,28 @@
                 const locationName = data.display_name;
                 const formElement = document.createElement('form')
                 const inputOne = document.createElement('input')
+                const inputTwo = document.createElement('input')
+                const inputThree = document.createElement('input')
+                const inputFour = document.createElement('input')
+                const inputFive = document.createElement('input')
                 inputOne.setAttribute('name', 'location')
                 inputOne.value = locationName
+                inputTwo.setAttribute('name', 'latitude')
+                inputTwo.value = marker.getLatLng().lat
+                inputThree.setAttribute('name', 'longitude')
+                inputThree.value = marker.getLatLng().lng
+                inputFour.setAttribute('name', 'myLongitude')
+                inputFour.value = position.coords.longitude
+                inputFive.setAttribute('name', 'myLatitude')
+                inputFive.value = position.coords.latitude
                 formElement.appendChild(inputOne)
+                formElement.appendChild(inputTwo)
+                formElement.appendChild(inputThree)
+                formElement.appendChild(inputFour)
+                formElement.appendChild(inputFive)
                 formElement.setAttribute('method', 'POST')
                 formElement.setAttribute('action', '')
+                formElement.style.display = 'none'
                 document.body.appendChild(formElement)
                 formElement.submit()
             })
