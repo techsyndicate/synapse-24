@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help</title>
+    <style>
+        .headings {
+            margin-left: 9.6vw;
+            margin-top: 4vh;
+        }
+        .main-heading {
+            font-family: Outfit;
+            font-size: 2.5vw;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            color: #fff;
+        }
+        .special-text {
+            color: #466EFF;
+        }
+
+        main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            margin-top: 7vh;
+            width: 81.302vw;
+            height: 55vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 4vw;
+            /* background: black; */
+        }
+        .left {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+            /* justify-content: center; */
+            gap: 2vw;
+            height: 100%;
+            /* background: red */
+        }
+        .right {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+            justify-content: space-between;
+            /* background: red; */
+        }
+        .search {
+            background: rgba(42, 42, 42, 0.49);
+            backdrop-filter: blur(16.850000381469727px);
+            height: 7.8vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            border-radius: 10px;
+        }
+        .search-icon {
+            width: 1vw;
+            aspect-ratio: 1;
+        }
+        .inp {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 1vw;
+            color: #FFF;
+            font-family: Outfit;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            width: 70%;
+        }
+        .inp::placeholder {
+            color: #fff;
+        }
+        .box {
+            width: 100%;
+            height: 44vh;
+            border-radius: 14px;
+            padding: 1.1vw;
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5vw;
+            justify-content: space-between;
+            background: rgba(42, 42, 42, 0.49);
+            backdrop-filter: blur(16.850000381469727px);
+
+        }
+
+        .content {
+            width: 100%;
+            border-radius: 8px;
+            background: rgba(43, 43, 43, 0.49);
+            backdrop-filter: blur(16.850000381469727px);
+            padding: 1vw;
+            height: 30vh;
+        }
+
+        .text > p {
+            color: #FFF;
+            font-family: Outfit;
+            font-size: 1vw;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+        
+        .stars {
+            /* width: 4vw; */
+            height: 100%;
+            aspect-ratio: 1;
+        }
+
+        .container2 {
+            display: flex;
+            flex-direction: row;
+            gap: 1vw;
+        }
+        .search-button {
+            color: #466EFF;
+            font-family: Outfit;
+            font-size: 1vw;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            text-decoration-line: underline;
+        }
+        .heading-svg {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1vw;
+            /* justify-content: center; */
+        }
+        .heading-svg > svg {
+            width: 0.9vw;
+            /* aspect-ratio: initial; */
+        }
+        .bg-box {
+            width: 80%;
+            height: 2vh;
+            border-radius: 27px;
+            background: rgba(70, 110, 255, 0.20);
+            filter: blur(46px);
+            position: absolute;
+            z-index: -2;
+            
+        }
+        .help {
+            height: 9vh;
+            border-radius: 14px;
+            background: rgba(42, 42, 42, 0.49);
+            backdrop-filter: blur(100px);
+            position: relative;
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .texts {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+        }
+        .texts > p {
+            color: #FFF;
+            font-family: Outfit;
+            font-size: 1vw;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+        }
+        .heading-svg > a {
+            color: #466EFF;
+            font-family: Outfit;
+            font-size: 1vw;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            text-decoration: none;
+        }
+        .heading-svg > svg {
+            width: 0.5vw;
+        }
+
+        .helps {
+            
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+            justify-content: center;
+            gap: 1.5vw;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/cursor.ejs') %>
+
+    <div class="headings">
+        <h1 class="main-heading"><span class="special-text">Help</span> Centre</h1>
+        <p>Find the answers to your questions</p>
+    </div>
+    
+    <main>
+        <div class="container">
+            <div class="left">
+                <div class="search">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="#466EFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 19L15 15" stroke="#466EFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+
+                      <input id="prompt" autofocus type="text" class="inp" placeholder="Search questions, keywords, topics">
+
+                      <a id="button" class="search-button">Search</a>
+                </div>
+                <div class="box">
+                    <div class="content">
+                        <p id="text">BHOOTNI KE</p>
+                    </div>
+                        
+                    <div class="container2">
+                        <svg class="stars" width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00390625 23.4935C10.2169 23.4843 18.4934 15.2022 18.4934 4.98706L18.4935 4.98706C18.4935 15.2022 26.7699 23.4843 36.9829 23.4935C26.7699 23.5027 18.4935 31.7848 18.4935 41.9999H18.4933C18.4933 31.7848 10.2169 23.5027 0.00390625 23.4935Z" fill="#53FAAA"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M24.9858 9.50957C29.6853 9.51781 33.4924 13.33 33.4924 18.0314C33.4924 18.0314 33.4924 18.0314 33.4924 18.0314H33.4924V18.0314C33.4924 13.3318 37.2965 9.52081 41.9934 9.50958C37.2965 9.49835 33.4924 5.68732 33.4924 0.987793C33.4924 5.68917 29.6853 9.50135 24.9858 9.50957Z" fill="#53FAAA"/>
+                        </svg>
+                        <div class="text">
+                            <p>Answered by</p>
+                            <p style="color: #53FAAA; text-decoration-line: underline; font-weight: 600;">hamara AI</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="heading-svg">
+                    <h1 class="main-heading">Guides and FAQ's</h1>
+                    <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 2L12 12L2 22" stroke="#466EFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>                    
+                </div>
+                <div class="helps">
+                    <div class="help">
+                        <div class="texts">
+                            <p>Book a ride</p>
+
+                            <div class="heading-svg">
+                                <a href="#">Read an article</a>
+                                <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 2L12 12L2 22" stroke="#466EFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>                    
+                            </div>
+                        </div>
+                        <div class="bg-box">
+
+                        </div>
+                    </div>
+                    <div class="help">
+                        <div class="texts">
+                            <p>Track your Bus/Auto</p>
+
+                            <div class="heading-svg">
+                                <a href="#">Read an article</a>
+                                <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 2L12 12L2 22" stroke="#466EFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>                    
+                            </div>
+                        </div>
+                        <div class="bg-box">
+
+                        </div>
+                    </div>
+                    <div class="help">
+                        <div class="texts">
+                            <p>Manage Account</p>
+
+                            <div class="heading-svg">
+                                <a href="#">Read an article</a>
+                                <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 2L12 12L2 22" stroke="#466EFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>                    
+                            </div>
+                        </div>
+                        <div class="bg-box">
+
+                        </div>
+                    </div>
+                    <div class="help">
+                        <div class="texts">
+                            <p>Redeem Rewards</p>
+
+                            <div class="heading-svg">
+                                <a href="#">Read an article</a>
+                                <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 2L12 12L2 22" stroke="#466EFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>                    
+                            </div>
+                        </div>
+                        <div class="bg-box">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const button = document.getElementById("button")
+        const prompt = document.getElementById("prompt")
+        const text = document.getElementById("text")
+
+        button.addEventListener("click", async () => {
+            console.log(prompt.value)
+            const rawResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=AIzaSyBPwy19Oy_lEAklRAN0zV_G8nDTswdEqcI', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                "contents": [{
+                    "parts":[{
+                    "text": prompt.value}]}]
+                })
+            });
+            const content = await rawResponse.json();
+            console.log(content)
+            if (content.candidates[0].finishReason == "MAX_TOKENS") {
+                text.innerText = "The service is unavailable right now. Please try again after a minute or so."
+            }
+            console.log(content.candidates[0].content.parts[0].text);
+            text.innerText = content.candidates[0].content.parts[0].text
+        });
+    </script>
+</body>
+</html>

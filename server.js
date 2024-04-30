@@ -20,6 +20,7 @@ const indexRouter = require('./routers/indexRouter'),
     kycRouter = require('./routers/kycRouter'),
     rewardsRouter = require('./routers/rewardsRouter'),
     statusRouter = require('./routers/statusRouter'),
+    helpRouter = require('./routers/helpRouter'),
     apiRouter = require('./routers/apiRouter')
     
 app.use(express.static('public'))
@@ -51,6 +52,7 @@ app.use('/dashboard', ensureAuthenticated, dashboardRouter)
 app.use('/api', ensureAuthenticated, apiRouter)
 app.use('/kyc', ensureAuthenticated, kycRouter)
 app.use('/status', ensureAuthenticated, statusRouter)
+app.use('/help', ensureAuthenticated, helpRouter)
 app.use('/rewards', ensureAuthenticated, rewardsRouter)
 
 app.listen(PORT, console.log(`Ordin <3 TS listening on port ${PORT}`))
