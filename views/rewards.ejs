@@ -82,7 +82,9 @@
         .companiesGrid {
             display: flex;
             flex-wrap: wrap;
+            <% if (user.rewards.length < 4) { %>
             width: 193vw;
+            <% } %>
             margin-left: 6vw;
             gap: 3vw;
             margin-top: 1.5vw;
@@ -97,6 +99,9 @@
             position: relative;
             cursor: pointer;
             transition: 0.2s;
+        }
+        .companiesGridBox:nth-child(5) {
+            margin-left: 8vw;
         }
         .companiesGridBox:hover {
             transform: scale(1.1, 1.1);
@@ -162,54 +167,46 @@
     </div>
     <div class="companiesGridContainer" id="companiesGridContainer">
         <div class="companiesGrid">
-            <div class="companiesGridBox">
-                <img src="prime.png" onclick="claimReward('prime')">
-                <% if(user.rewards.includes('prime')) { %>
-                    <div class="redeemedContainer">REDEEMED</div> onclick="claimReward('prime')"
-                <% } %>
-            </div>
-            <div class="companiesGridBox">
-                <img src="netflix.png" onclick="claimReward('netflix')">
-                <% if(user.rewards.includes('netflix')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
-            <div class="companiesGridBox">
-                <img src="spotify.png" onclick="claimReward('spotify')">
-                <% if(user.rewards.includes('spotify')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
-            <div class="companiesGridBox">
-                <img src="fifa.png" onclick="claimReward('fifa')">
-                <% if(user.rewards.includes('fifa')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
-            <div class="companiesGridBox" style="margin-left: 9vw;">
-                <img src="amazon.png" onclick="claimReward('amazon')">
-                <% if(user.rewards.includes('amazon')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
-            <div class="companiesGridBox">
-                <img src="flipkart.png" onclick="claimReward('flipkart')">
-                <% if(user.rewards.includes('flipkart')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
-            <div class="companiesGridBox">
-                <img src="roblox.png" onclick="claimReward('roblox')">
-                <% if(user.rewards.includes('roblox')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
-            <div class="companiesGridBox">
-                <img src="adobe.png" onclick="claimReward('adobe')">
-                <% if(user.rewards.includes('adobe')) { %>
-                    <div class="redeemedContainer">REDEEMED</div>
-                <% } %>
-            </div>
+            <% if(!user.rewards.includes('prime')) { %>
+                <div class="companiesGridBox">
+                    <img src="prime.png" onclick="claimReward('prime')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('netflix')) { %>
+                <div class="companiesGridBox">
+                    <img src="netflix.png" onclick="claimReward('netflix')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('spotify')) { %>
+                <div class="companiesGridBox">
+                    <img src="spotify.png" onclick="claimReward('spotify')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('fifa')) { %>
+                <div class="companiesGridBox">
+                    <img src="fifa.png" onclick="claimReward('fifa')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('amazon')) { %>
+                <div class="companiesGridBox">
+                    <img src="amazon.png" onclick="claimReward('amazon')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('flipkart')) { %>
+                <div class="companiesGridBox">
+                    <img src="flipkart.png" onclick="claimReward('flipkart')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('roblox')) { %>
+                <div class="companiesGridBox">
+                    <img src="roblox.png" onclick="claimReward('roblox')">
+                </div>
+            <% } %>
+            <% if(!user.rewards.includes('adobe')) { %>
+                <div class="companiesGridBox">
+                    <img src="adobe.png" onclick="claimReward('adobe')">
+                </div>
+            <% } %>
         </div>
     </div>
     <div class="alertBox" id="alertBox">

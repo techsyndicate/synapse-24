@@ -32,6 +32,16 @@ const userSchema = new Schema({
         type: String,
         required: true,
         default: "free"
+    },
+    pfp: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    kyc: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 

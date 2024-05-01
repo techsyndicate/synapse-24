@@ -5,12 +5,14 @@ const Users = require('../schemas/userSchema')
 
 router.get('/', async (req, res) => {
     if (!req.user) return res.redirect('/login')
+    if (!req.user.kyc) return res.redirect('/kyc')
     if (req.user.status == 'busy') return res.redirect('/status')
     res.render('index', {user: req.user})
 })
 
 router.post('/', async (req, res) => {
     if (!req.user) return res.redirect('/login')
+    if (!req.user.kyc) return res.redirect('/kyc')
     const {location, latitude, longitude, myLatitude, myLongitude, myFinalHomeLocation} = req.body
     function getFare(lat1, lon1, lat2, lon2) {
         const earthRadius = 6371;

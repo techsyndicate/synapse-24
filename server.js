@@ -8,7 +8,7 @@ const express = require('express'),
     app = express(),
     session = require('express-session'),
     flash = require('express-flash'),
-    {ensureAuthenticated, forwardAuthenticated} = require('./utils/authenticate'),
+    {ensureAuthenticated, forwardAuthenticated, ensureKyc} = require('./utils/authenticate'),
     PORT = process.env.PORT || 5000
 
 const indexRouter = require('./routers/indexRouter'),
@@ -47,12 +47,12 @@ app.use('/', indexRouter)
 app.use('/login', forwardAuthenticated, loginRouter)
 app.use('/register', forwardAuthenticated, regRouter)
 app.use('/logout', ensureAuthenticated, logoutRouter)
-app.use('/profile', ensureAuthenticated, profileRouter)
+app.use('/profile', ensureAuthenticated, ensureKyc, profileRouter)
 app.use('/dashboard', ensureAuthenticated, dashboardRouter)
 app.use('/api', ensureAuthenticated, apiRouter)
 app.use('/kyc', ensureAuthenticated, kycRouter)
-app.use('/status', ensureAuthenticated, statusRouter)
+app.use('/status', ensureAuthenticated, ensureKyc, statusRouter)
 app.use('/help', ensureAuthenticated, helpRouter)
-app.use('/rewards', ensureAuthenticated, rewardsRouter)
+app.use('/rewards', ensureAuthenticated, ensureKyc, rewardsRouter)
 
 app.listen(PORT, console.log(`Ordin <3 TS listening on port ${PORT}`))

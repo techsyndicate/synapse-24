@@ -11,6 +11,33 @@
         margin: 0px;
         color: white;
         overflow-x: hidden;
+        cursor: none;
+    }
+    #cursor {
+        position: fixed;
+        top: -5px;
+        left: -5px;
+        width: 10px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 999;
+    }
+
+    #cursor-border {
+        --size: 50px;
+        position: fixed;
+        top: calc(var(--size) / -2);
+        left: calc(var(--size) / -2);
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px white;
+        pointer-events: none;
+        transition: top 0.15s ease-out, left 0.15s ease-out, width 0.15s ease-out,
+            height 0.15s ease-out, background-color 0.15s ease-out;
+        z-index: 999;
     }
     * {
         box-sizing: border-box;
@@ -35,11 +62,58 @@
     .navIcon {
         font-size: 2vw;
     }
+    .navIcon img {
+        width: 2vw;
+        height: 2vw;
+        object-fit: cover;
+        border-radius: 2vw;
+        cursor: pointer;
+    }
 </style>
 <div class="nav">
+    <div id="cursor"></div>
+    <div id="cursor-border"></div>
     <img src="fullLogo.png">
     <div class="navIcons">
-        <div class="navIcon"><i class="fas fa-user-circle"></i></div>
+        <div class="navIcon"><img src="<%= user.pfp %>"></div>
         <div class="navIcon"><i class="far fa-bell"></i></div>
     </div>
 </div>
+<script>
+    const cursor = document.querySelector("#cursor");
+    const cursorBorder = document.querySelector("#cursor-border");
+    const cursorPos = { x: 0, y: 0 };
+    const cursorBorderPos = { x: 0, y: 0 };
+
+    document.addEventListener("mousemove", (e) => {
+        cursorPos.x = e.clientX;
+        cursorPos.y = e.clientY;
+
+        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        requestAnimationFrame(function loop() {
+            const easting = 8;
+            cursorBorderPos.x += (cursorPos.x - cursorBorderPos.x) / easting;
+            cursorBorderPos.y += (cursorPos.y - cursorBorderPos.y) / easting;
+
+            cursorBorder.style.transform = `translate(${cursorBorderPos.x}px, ${cursorBorderPos.y}px)`;
+            requestAnimationFrame(loop);
+        });
+
+        document.querySelectorAll("[data-cursor]").forEach((item) => {
+        item.addEventListener("mouseover", (e) => {
+            if (item.dataset.cursor === "pointer") {
+                cursorBorder.style.backgroundColor = "transparent";
+                cursor.style.backgroundColor = "#16e16e";
+                cursorBorder.style.setProperty("--size", "80px");
+            }
+        });
+        item.addEventListener("mouseout", (e) => {
+            cursor.style.backgroundColor = "#fff";
+            cursorBorder.style.backgroundColor = "unset";
+            cursorBorder.style.mixBlendMode = "unset";
+            cursorBorder.style.setProperty("--size", "50px");   
+        });
+    });
+</script>

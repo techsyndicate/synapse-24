@@ -49,8 +49,6 @@
             justify-content: center;
             width: 100%;
             gap: 1.5vw;
-            /* height: 100%; */
-            /* background-color: red; */
         }
         .headings {
             align-self: flex-start;
@@ -75,6 +73,8 @@
             width: fit-content;
             height: fit-content;
             position: relative;
+            background-color: #000;
+            border-radius: 1vw;
         }
         canvas {
             position: absolute;
@@ -88,10 +88,10 @@
             left: 1vw;
         }
         video, canvas {
-            border-radius: 14px;
+            border-radius: 1vw;
             width: 80vw;
             height: 60vh;
-            object-fit: cover;
+            object-fit: contain;
             pointer-events: none;
         }
         button {
@@ -121,6 +121,36 @@
         #buttons {
             display: none;
         }
+        .cameraOverlay {
+            width: 80vw;
+            height: 60vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #18181b;
+            border-radius: 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .cameraCorner {
+            width: 3vw;
+            height: 3vw;
+            position: absolute;
+        }
+        .plusSymbol {
+            width: 6vw;
+            height: 6vw;
+        }
+        .overlayText {
+            position: absolute;
+            bottom: 1.5vw;
+            width: 100%;
+            text-align: center;
+            color: #696969;
+        }
         </style>
 </head>
 
@@ -138,20 +168,28 @@
             <p class="main-para" >Verify your identity</p>
         </div>
         <div class="vid-div">
-            <p id="vid-p">Smile :)</p>
+            <div class="cameraOverlay" onclick="startCamera()" id="cameraOverlay">
+                <div class="cameraCorner" style="border-left: 2px solid #696969; border-top: 2px solid #696969; top: 1.5vw; left: 1.5vw;"></div>
+                <div class="cameraCorner" style="border-right: 2px solid #696969; border-top: 2px solid #696969; top: 1.5vw; right: 1.5vw;"></div>
+                <div class="cameraCorner" style="border-left: 2px solid #696969; border-bottom: 2px solid #696969; bottom: 1.5vw; left: 1.5vw;"></div>
+                <div class="cameraCorner" style="border-bottom: 2px solid #696969; border-right: 2px solid #696969; bottom: 1.5vw; right: 1.5vw;"></div>
+                <svg class="plusSymbol" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M56 0V112" stroke="#696969" stroke-width="2"/>
+                    <path d="M0 56L112 56" stroke="#696969" stroke-width="2"/>
+                </svg>  
+                <div class="overlayText">Click to start camera</div>
+            </div>
+            <p id="vid-p"></p>
             <video id="player" autoplay></video>
             <canvas id="canvas" width="320" height="240"></canvas>
         </div>
         <div id="second-buttons" class="buttons">
-            <button id="capture">Capture</button>
+            <button id="capture" style="display: none;">Capture</button>
             <!-- <button class="take">Take another</button> -->
         </div>
         <!-- <img id="photo" alt="The screen capture will appear in this box."> -->
         <div id="buttons" class="buttons">
-            <form action="/kyc/uploadKYC" method="post">
-                <input name="kycImage" id="input" type="hidden">
-                <button>Submit</button>
-            </form>
+            <button onclick="uploadImage(event)">Upload</button>
             <button onclick="window.location.reload()" class="take">Take another</button>
         </div>
     </main>
@@ -171,14 +209,42 @@
   };
 
   captureButton.addEventListener('click', () => {
-    // Draw the video frame to the canvas.
-    context.drawImage(player, 0, 0, canvas.width, canvas.height);
-    vidP.innerText = "Captured Photo"
-    constraints.video = false
+      document.getElementById('second-buttons').style.display = 'none'
+      document.getElementById('buttons').style.display = 'flex'
+      context.drawImage(player, 0, 0, canvas.width, canvas.height);
+      vidP.innerText = "Captured Photo"
   });
-  navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-    player.srcObject = stream;
-  });
+  function startCamera() {
+      navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+        player.srcObject = stream;
+        document.getElementById('cameraOverlay').style.display = 'none'
+        document.getElementById('capture').style.display = 'inline'
+      });
+  }
+  function uploadImage(e) {
+      e.target.innerHTML = 'Uploading...'
+      e.target.style.opacity = '0.6'
+      e.target.style.cursor = 'not-allowed'
+      e.target.disabled = 'true'
+      const imageUrlData = canvas.toDataURL('image/png')
+      fetch('/kyc/uploadKyc', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({imageUrlData})
+      })
+      .then(response => {
+        if (response.ok) {
+            console.log('Ho gayi upload bkl')
+        } else {
+            console.log('Randi saale error khaali')
+        }
+      })
+      .catch(err => {
+        console.log(`Le error ab ${err}`)
+      })
+  }
 </script>
 
 </html>
