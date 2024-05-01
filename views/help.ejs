@@ -342,11 +342,11 @@
             console.log(newPrompt)
             const googleKeywords = newPrompt.split(" ")
             console.log(googleKeywords)
-            rydr(googleKeywords)
-
-
+            rydr(googleKeywords) // google keywords is an array MANDATORY
+            // find the most relevant keyword out of these keywords
+            
         });
-
+        
         function rydr(googleKeywords) {
             const keywords = {
                 "To cancel your ride, go to the ride status page and then cancel.": ["cancel", "cancellation", "cancelation", "cancelling", "canceling", "refund", "stop"],
