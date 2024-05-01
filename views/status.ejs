@@ -197,7 +197,9 @@
         }
         .pfp-2 {
             width: 1.7vw;
-            aspect-ratio: 1;
+            height: 1.7vw;
+            border-radius: 1.7vw;
+            object-fit: cover;
         }
         .maindiv > h1 {
             color: #FFF;
@@ -249,6 +251,15 @@
             padding: 0px 0.7vw;
             font-size: 1.6vw;
         }
+        .pfp {
+            width: 4vw !important;
+            height: 4vw !important;
+            border-radius: 2.5vw;
+            object-fit: cover;
+        }
+        .rideStatusPageLink {
+            color: #466EFF !important;
+        }
     </style>
 </head>
 <body>
@@ -266,10 +277,10 @@
             <div class="right">
                 <div class="top">
                     <div class="creds">
-                        <img src="/person1.png" class="pfp" alt="">
+                        <img src="<%= ride.driver.pfp %>" class="pfp" alt="">
                         <div class="names">
                             <div class="headings2">
-                                <p><%= user.fname + ' ' + user.lname %></p>
+                                <p><%= ride.driver.fname + ' ' + ride.driver.lname %></p>
                             </div>
                             <div class="times">
                                 <p class="special"><%= ride.time %> Mins</p>
@@ -282,17 +293,17 @@
                                 <form action="/status/vehicle" method="POST">
                                     <input type="hidden" name="vehicle" value="auto">
                                     <% if (ride.vehicle == 'auto') { %>
-                                        <button style="color: #000; background-color: #53FAAA;" type="submit">Auto</button>
+                                        <button style="color: #000; background-color: #53FAAA;" type="submit" data-cursor="pointer">Auto</button>
                                     <% } else { %>
-                                        <button style="color: #fff; background-color: #212122;" type="submit">Auto</button>
+                                        <button style="color: #fff; background-color: #212122;" type="submit" data-cursor="pointer">Auto</button>
                                     <% } %>
                                 </form>
                                 <form action="/status/vehicle" method="POST">
                                     <input type="hidden" name="vehicle" value="bus">
                                     <% if (ride.vehicle == 'auto') { %>
-                                    <button style="color: #fff; background-color: #212122;" type="submit">Bus</button>
+                                    <button style="color: #fff; background-color: #212122;" type="submit" data-cursor="pointer">Bus</button>
                                     <% } else { %>
-                                    <button style="color: #000; background-color: #53FAAA;" type="submit">Bus</button>
+                                    <button style="color: #000; background-color: #53FAAA;" type="submit" data-cursor="pointer">Bus</button>
                                     <% } %>
                                 </form>
                             </div>
@@ -319,14 +330,14 @@
                         <div class="riders">
                             <% for (let i = 0; i < ride.riders.length; i++) { %>
                             <div class="rider">
-                                <img class="pfp-2" src="/person2.png" class="person-2" alt="">
-                                <p><%= ride.riders[i] %></p>
+                                <img class="pfp-2" src="<%= ride.riders[i].pfp %>" class="person-2" alt="">
+                                <p><%= ride.riders[i].fname + ' ' + ride.riders[i].lname %></p>
                             </div>
                             <% } %>
                         </div>
                     </div>
                     <form action="/status/cancel" method="post">
-                        <button class="cancel">
+                        <button class="cancel" data-cursor="pointer">
                             Cancel Ride
                         </button>
                     </form>
@@ -335,16 +346,7 @@
         </div>
     </main>
     <script>
-        var selectedLocation = false 
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        }
-        
-        function showPosition(position) {
+        function showPosition() {
             var redMarker = L.icon({
                 iconUrl: '/marker.png',
                 iconSize: [80, 80],
@@ -353,7 +355,7 @@
                 shadowSize: [41, 41]
             });
             console.log('called')
-            var map = L.map('map', {zoomControl: false, attributionControl: false}).setView([position.coords.latitude, position.coords.longitude], 16);
+            var map = L.map('map', {zoomControl: false, attributionControl: false}).setView([<%= ride.latitude %>, <%= ride.longitude %>], 16);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                 subdomains: 'abcd',
                 maxZoom: 19
@@ -377,56 +379,9 @@
             customOverlay.appendChild(otp3)
             customOverlay.appendChild(otp4)
             mapContainer.appendChild(customOverlay)
-            var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: redMarker}).addTo(map);
-            selectedLocation = true
-            getLocationName(position.coords.latitude, position.coords.longitude)
-            
-            map.on('click', function(e) {
-                marker.remove()
-                var lat = e.latlng.lat;
-                var lng = e.latlng.lng;
-                console.log('Selected location:', lat, lng);
-                marker = L.marker([lat, lng], {icon: redMarker}).addTo(map);
-                selectedLocation = true
-                getLocationName(lat, lng)
-            });
+            var marker = L.marker([<%= ride.latitude %>, <%= ride.longitude %>], {icon: redMarker}).addTo(map);
         }
-        
-        function getLocationName(lat, lng) {
-            const latitude = lat;
-            const longitude = lng;
-            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const locationName = data.display_name;
-                console.log('Location:', locationName);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-        
-        function getLocationCoordinates(search) {
-            const locationName = search;
-            const apiUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName)}`;
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data.length > 0) {
-                    const latitude = data[0].lat;
-                    const longitude = data[0].lon;
-                    console.log('Coordinates:', latitude, longitude);
-                } else {
-                    console.log('Location not found');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-        getLocation()
+        showPosition()
 
         </script>
 </body>

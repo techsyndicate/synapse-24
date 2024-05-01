@@ -47,7 +47,9 @@ router.post('/', async (req, res) => {
                 currentPrices = currentRides[i].price,
                 currentDistances = currentRides[i].distance,
                 currentMyLocations = currentRides[i].myLocation,
-                currentTimes = currentRides[i].time
+                currentTimes = currentRides[i].time,
+                currentLatitudes = currentRides[i].latitude,
+                currentLongitudes = currentRides[i].longitude
             if (newPeople.includes(req.user.email)) {
                 return res.redirect('/')
             };
@@ -57,6 +59,8 @@ router.post('/', async (req, res) => {
             currentMyLocations.push(myFinalHomeLocation)
             currentDistances.push(getFare(latitude, longitude, myLatitude, myLongitude)[1])
             currentTimes.push(getFare(latitude, longitude, myLatitude, myLongitude)[2])
+            currentLatitudes.push(Number(latitude))
+            currentLongitudes.push(Number(longitude))
             await Rides.updateOne({rideId: currentRides[i].rideId}, {
                 $set: {
                     riders: newPeople,
@@ -64,7 +68,9 @@ router.post('/', async (req, res) => {
                     price: currentPrices,
                     myLocation: currentMyLocations,
                     distance: currentDistances,
-                    time: currentTimes
+                    time: currentTimes,
+                    latitude: currentLatitudes,
+                    longitude: currentLongitudes
                 }
             })
             const foundMyUser = await Users.findOne({email: req.user.email})
@@ -95,7 +101,9 @@ router.post('/', async (req, res) => {
         price: [getFare(latitude, longitude, myLatitude, myLongitude)[0]],
         distance: [getFare(latitude, longitude, myLatitude, myLongitude)[1]],
         myLocation: [myFinalHomeLocation],
-        time: [getFare(latitude, longitude, myLatitude, myLongitude)[2]]
+        time: [getFare(latitude, longitude, myLatitude, myLongitude)[2]],
+        latitude: [Number(latitude)],
+        longitude: [Number(longitude)]
     })
     await newRide.save()
     await Users.updateOne({email: req.user.email}, {

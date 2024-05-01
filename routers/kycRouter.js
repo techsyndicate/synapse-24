@@ -18,7 +18,7 @@ router.post('/uploadKyc', async (req, res) => {
             image: base64Hatao,
             }, {
                 headers: {
-                    Authorization: 'Client-ID 343520d7e55a1ff',
+                    Authorization: `Client-ID ${process.env.IMGUR_ID}`,
                 },
             });
         await User.updateOne({email: req.user.email}, {

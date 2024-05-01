@@ -22,7 +22,7 @@
         background-color: white;
         border-radius: 50%;
         pointer-events: none;
-        z-index: 999;
+        z-index: 9999999;
     }
 
     #cursor-border {
@@ -37,7 +37,7 @@
         pointer-events: none;
         transition: top 0.15s ease-out, left 0.15s ease-out, width 0.15s ease-out,
             height 0.15s ease-out, background-color 0.15s ease-out;
-        z-index: 999;
+        z-index: 1001;
     }
     * {
         box-sizing: border-box;
@@ -59,8 +59,13 @@
     .navIcons {
         display: flex;
         gap: 1.7vw;
+        align-items: center;
     }
     .navIcon {
+        font-size: 0px;
+        line-height: 0px;
+    }
+    .navIcon i {
         font-size: 2vw;
     }
     .navIcon img {
@@ -70,17 +75,26 @@
         border-radius: 2vw;
         cursor: pointer;
     }
+    .navIcons a {
+        color: white;
+        text-decoration: none;
+    }
 </style>
 <div class="nav">
     <div id="cursor"></div>
     <div id="cursor-border"></div>
     <img src="fullLogo.png">
     <div class="navIcons">
-        <div class="navIcon"><img src="<%= user.pfp %>"></div>
-        <div class="navIcon"><i class="far fa-bell"></i></div>
+        <a data-cursor="pointer" href="/" class="homePageLink">Home</a>
+        <a data-cursor="pointer" href="/status" class="rideStatusPageLink">Ride Status</a>
+        <a data-cursor="pointer" href="/rewards" class="rewardsPageLink">Rewards</a>
+        <a data-cursor="pointer" href="/help" class="helpPageLink">Help</a>
+        <div class="navIcon" data-cursor="pointer"><img src="<%= user.pfp %>"></div>
+        <div class="navIcon" data-cursor="pointer"><i class="far fa-bell"></i></div>
     </div>
 </div>
-<script>
+<script defer>
+    window.onload = () => {
     const cursor = document.querySelector("#cursor");
     const cursorBorder = document.querySelector("#cursor-border");
     const cursorPos = { x: 0, y: 0 };
@@ -116,4 +130,5 @@
             cursorBorder.style.setProperty("--size", "50px");   
         });
     });
+}
 </script>

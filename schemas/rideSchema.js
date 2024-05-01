@@ -33,6 +33,14 @@ const driverSchema = new Schema({
     time: {
         type: Array,
         required: true
+    },
+    latitude: {
+        type: Array,
+        required: true
+    },
+    longitude: {
+        type: Array,
+        required: true
     }
 })
 

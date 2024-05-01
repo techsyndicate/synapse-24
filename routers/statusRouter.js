@@ -10,14 +10,18 @@ router.get('/', async (req, res) => {
     for (let i = 0; i < foundRides.length; i++) {
         if (foundRides[i].riders.includes(req.user.email)) {
             const overallIndex = foundRides[i].riders.indexOf(req.user.email)
+            const foundDriver = await User.findOne({email: foundRides[i].driver})
             myRide.price = foundRides[i].price[overallIndex]
             myRide.distance = foundRides[i].distance[overallIndex]
             myRide.time = foundRides[i].time[overallIndex]
             myRide.otp = foundRides[i].otp
             myRide.vehicle = foundRides[i].vehicle
+            myRide.driver = foundDriver
+            myRide.latitude = Number(foundRides[i].latitude[overallIndex])
+            myRide.longitude = Number(foundRides[i].longitude[overallIndex])
             for (let k = 0; k < foundRides[i].riders.length; k++) {
                 const theFoundUser = await User.findOne({email: foundRides[i].riders[k]})
-                myRide.riders.push(`${theFoundUser.fname} ${theFoundUser.lname}`)
+                myRide.riders.push(theFoundUser)
             }
             if (foundRides[i].location[overallIndex].length > 20) {
                 myRide.dropOff = foundRides[i].location[overallIndex].substring(0, 20) + '...'
@@ -62,6 +66,8 @@ router.post('/cancel', async (req, res) => {
             foundRides[i].myLocation.splice(overallIndex, 1)
             foundRides[i].distance.splice(overallIndex, 1)
             foundRides[i].time.splice(overallIndex, 1)
+            foundRides[i].latitude.splice(overallIndex, 1)
+            foundRides[i].longitude.splice(overallIndex, 1)
             console.log(foundRides[i])
             await Ride.updateOne({rideId: foundRides[i].rideId}, {
                 $set: {
@@ -70,7 +76,9 @@ router.post('/cancel', async (req, res) => {
                     location: foundRides[i].location,
                     myLocation: foundRides[i].myLocation,
                     distance: foundRides[i].distance,
-                    time: foundRides[i].time
+                    time: foundRides[i].time,
+                    latitude: foundRides[i].latitude,
+                    longitude: foundRides[i].longitude
                 }
             })
             await User.updateOne({email: req.user.email}, {
