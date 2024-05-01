@@ -197,6 +197,30 @@
         .logo {
             height: 3vh;
         }
+        .error {
+            position: absolute;
+            bottom: 2vw;
+            right: 2vw;
+            background: #466EFF;
+            padding: 12px;
+            /* width: ; */
+            border-radius: 5px;
+            animation: slideIn 300ms ease 1;
+        }
+        .error > p {
+            font-size: 1vw;
+            width: 10vw;
+            word-wrap: break-word;
+        }
+
+        @keyframes slideIn {
+            0% {
+                right: -10vw;
+            }
+            100% {
+                right: 2vw;
+            }
+        }
     </style>
 </head>
 <body>
@@ -256,6 +280,11 @@
             </div>
         </form>
     </main>
+    <% if (error) { %>
+        <div class="error">
+            <p><%= error %></p>
+        </div>
+    <% } %>
     <script>
         const cursor = document.querySelector("#cursor");
         const cursorBorder = document.querySelector("#cursor-border");
