@@ -4,6 +4,7 @@ const Ride = require('../schemas/rideSchema')
 
 router.get('/', async (req, res) => {
     const foundUser = await User.findOne({email: req.user.email})
+    if (foundUser.status == 'free') return res.redirect('/')
     var myRide = {riders: []};
     const foundRides = await Ride.find({})
     for (let i = 0; i < foundRides.length; i++) {
@@ -13,6 +14,7 @@ router.get('/', async (req, res) => {
             myRide.distance = foundRides[i].distance[overallIndex]
             myRide.time = foundRides[i].time[overallIndex]
             myRide.otp = foundRides[i].otp
+            myRide.vehicle = foundRides[i].vehicle
             for (let k = 0; k < foundRides[i].riders.length; k++) {
                 const theFoundUser = await User.findOne({email: foundRides[i].riders[k]})
                 myRide.riders.push(`${theFoundUser.fname} ${theFoundUser.lname}`)
@@ -31,6 +33,55 @@ router.get('/', async (req, res) => {
         }
     }
     res.render('status', {user: foundUser, ride: myRide})
+})
+
+router.post('/vehicle', async (req, res) => {
+    const {vehicle} = req.body
+    const foundRides = await Ride.find({})
+    for (let i = 0; i < foundRides.length; i++) {
+        if (foundRides[i].riders.includes(req.user.email)) {
+            await Ride.updateOne({rideId: foundRides[i].rideId}, {
+                $set: {
+                    vehicle: vehicle
+                }
+            })
+            return res.redirect('/status')
+        }
+    }
+})
+
+router.post('/cancel', async (req, res) => { 
+    const foundRides = await Ride.find({})
+    for (let i = 0; i < foundRides.length; i++) {
+        if (foundRides[i].riders.includes(req.user.email)) {
+            const overallIndex = foundRides[i].riders.indexOf(req.user.email)
+            console.log(foundRides[i])
+            foundRides[i].price.splice(overallIndex, 1)
+            foundRides[i].riders.splice(overallIndex, 1)
+            foundRides[i].location.splice(overallIndex, 1)
+            foundRides[i].myLocation.splice(overallIndex, 1)
+            foundRides[i].distance.splice(overallIndex, 1)
+            foundRides[i].time.splice(overallIndex, 1)
+            console.log(foundRides[i])
+            await Ride.updateOne({rideId: foundRides[i].rideId}, {
+                $set: {
+                    price: foundRides[i].price,
+                    riders: foundRides[i].riders,
+                    location: foundRides[i].location,
+                    myLocation: foundRides[i].myLocation,
+                    distance: foundRides[i].distance,
+                    time: foundRides[i].time
+                }
+            })
+            await User.updateOne({email: req.user.email}, {
+                $set: {
+                    status: 'free'
+                }
+            })
+            return res.redirect('/status')
+            //riders, location, mylocation, distance, time, price
+        }
+    }
 })
 
 module.exports = router

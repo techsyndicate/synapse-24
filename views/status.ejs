@@ -23,6 +23,9 @@
             font-weight: 600;
             line-height: normal;
         }
+        .creds img {
+            width: 4vw;
+        }
         main {
             width: 100vw;
             height: fit-content;
@@ -95,10 +98,7 @@
             width: 20vw;
             background: #53FAAA;
             color: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 2.1vh 0px;
         }
         .creds {
             /* margin-top: 2vh; */
@@ -145,6 +145,8 @@
             outline: none;
             border: none;
             cursor: pointer;
+            padding: 1vw;
+            font-size: 1vw;
         }
         .times {
             gap: 0.6vw;
@@ -185,7 +187,7 @@
         p {
             color: #FFF;
             font-family: Outfit;
-            font-size: 1.9vh;
+            font-size: 0.9vw;
             font-style: normal;
             font-weight: 400;
             line-height: normal;
@@ -215,7 +217,7 @@
             flex-wrap: wrap;
             width: 100%;
             height: 100%;
-            margin-top: 0.5vw;
+            margin-top: 0.8vw;
         }
         .rider {
             display: flex;
@@ -228,7 +230,7 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.55);
             z-index: 999999;
             width: 15vw;
             padding: 1vw;
@@ -254,7 +256,7 @@
     <!-- <input type="text" oninput="getLocationCoordinates(this.value)"> -->
     <div class="headings">
         <h1><span style="color: #466EFF;">Ride</span> Status</h1>
-        <p>Find the answers to your questions</p>
+        <p>Track your journey in a few clicks!</p>
     </div>
     <main class="main">
         <div class="container">
@@ -270,15 +272,29 @@
                                 <p><%= user.fname + ' ' + user.lname %></p>
                             </div>
                             <div class="times">
-                                <p class="special"><%= ride.time %> min</p>
+                                <p class="special"><%= ride.time %> Mins</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" viewBox="0 0 3 3" fill="none">
                                     <circle cx="1.5" cy="1.5" r="1.5" fill="white" fill-opacity="0.3"/>
                                 </svg>
-                                <p class="special"><%= ride.distance %> km</p>
+                                <p class="special"><%= ride.distance %> Km</p>
                             </div>
                             <div class="buttons">
-                                <button style="color: #000; background-color: #53FAAA;">Auto</button>
-                                <button style="color: #fff; background-color: #212122;">Bus</button>
+                                <form action="/status/vehicle" method="POST">
+                                    <input type="hidden" name="vehicle" value="auto">
+                                    <% if (ride.vehicle == 'auto') { %>
+                                        <button style="color: #000; background-color: #53FAAA;" type="submit">Auto</button>
+                                    <% } else { %>
+                                        <button style="color: #fff; background-color: #212122;" type="submit">Auto</button>
+                                    <% } %>
+                                </form>
+                                <form action="/status/vehicle" method="POST">
+                                    <input type="hidden" name="vehicle" value="bus">
+                                    <% if (ride.vehicle == 'auto') { %>
+                                    <button style="color: #fff; background-color: #212122;" type="submit">Bus</button>
+                                    <% } else { %>
+                                    <button style="color: #000; background-color: #53FAAA;" type="submit">Bus</button>
+                                    <% } %>
+                                </form>
                             </div>
                         </div>
                         <p>₹<%= ride.price %></p>
@@ -309,7 +325,7 @@
                             <% } %>
                         </div>
                     </div>
-                    <form action="" method="post">
+                    <form action="/status/cancel" method="post">
                         <button class="cancel">
                             Cancel Ride
                         </button>

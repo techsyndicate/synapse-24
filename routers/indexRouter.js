@@ -65,9 +65,12 @@ router.post('/', async (req, res) => {
                     time: currentTimes
                 }
             })
+            const foundMyUser = await Users.findOne({email: req.user.email})
             await Users.updateOne({email: req.user.email}, {
                 $set: {
-                    status: 'busy'
+                    status: 'busy',
+                    points: foundMyUser.points + 100,
+                    carbonEmissions: foundMyUser.carbonEmissions + 10
                 }
             })
             return res.redirect('/')
@@ -76,6 +79,7 @@ router.post('/', async (req, res) => {
     for (let j = 0; j < 20; j++) {
         myNewRideId += chars[Math.floor(Math.random() * 62)]
     }
+    const foundMyUser = await Users.findOne({email: req.user.email})
     const otp = Math.floor(Math.random() * 10000).toString()
     const finalOtp = otp.padStart(4, '0')
     const myDriverEmail = allDrivers.email
@@ -94,7 +98,9 @@ router.post('/', async (req, res) => {
     await newRide.save()
     await Users.updateOne({email: req.user.email}, {
         $set: {
-            status: 'busy'
+            status: 'busy',
+            points: foundMyUser.points + 100,
+            carbonEmissions: foundMyUser.carbonEmissions + 10
         }
     })
     await Users.updateOne({email: myDriverEmail}, {
