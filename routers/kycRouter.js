@@ -6,6 +6,7 @@ const imgur = require('imgur')
 const axios = require('axios')
 
 router.get('/', async (req, res) => {
+    if (req.user.kyc) return res.redirect('/')
     res.render('kyc')
 })
 

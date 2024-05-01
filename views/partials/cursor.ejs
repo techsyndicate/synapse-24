@@ -43,6 +43,7 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        cursor: none !important;
     }
     .nav {
         width: 90vw;
@@ -105,7 +106,6 @@
         item.addEventListener("mouseover", (e) => {
             if (item.dataset.cursor === "pointer") {
                 cursorBorder.style.backgroundColor = "transparent";
-                cursor.style.backgroundColor = "#16e16e";
                 cursorBorder.style.setProperty("--size", "80px");
             }
         });

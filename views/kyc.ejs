@@ -236,9 +236,10 @@
       })
       .then(response => {
         if (response.ok) {
-            console.log('Ho gayi upload bkl')
+            window.location.href = '/'
         } else {
-            console.log('Randi saale error khaali')
+            alert('There was an error. Please try again.')
+            window.location.reload()
         }
       })
       .catch(err => {
