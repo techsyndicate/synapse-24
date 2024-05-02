@@ -437,7 +437,7 @@
 
         function googleKiMaro(prompt) {
             return new Promise((resolve, reject) => {
-                fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=AIzaSyBPwy19Oy_lEAklRAN0zV_G8nDTswdEqcI', {
+                fetch("<%= gapi %>", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
