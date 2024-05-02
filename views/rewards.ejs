@@ -161,7 +161,10 @@
         </div>
     </div>
     <div class="redeem">
-        <p>Redeem</p>
+        <div>
+            <p>Redeem</p>
+            <p style="font-size: 0.8vw; color: #bbb;">*1000 Points Per Subscription</p>
+        </div>
         <div class="scrollIcons">
             <i class="fas fa-chevron-left" onclick="scrollToTheLeft()"></i>
             <span id="scrollPageNumber">1</span>
@@ -213,7 +216,7 @@
         </div>
     </div>
     <div class="alertBox" id="alertBox">
-        <i class="fas fa-check-circle" style="font-size: 1.3vw;"></i>&nbsp;
+        <i class="fas fa-check-circle" style="font-size: 1.3vw;" id="statusIcon"></i>&nbsp;
         <span id="responsetext"></span>
     </div>
     <script>
@@ -243,6 +246,11 @@
                 const div = document.getElementById('alertBox')
                 responsetextdiv.innerHTML = xhr.responseText
                 div.style.transform = 'translateX(0px)'
+                if (!xhr.responseText.includes('Bravo')) {
+                    document.getElementById('statusIcon').className = 'fas fa-times-circle'
+                } else {
+                    document.getElementById('statusIcon').className = 'fas fa-check-circle'
+                }
                 setTimeout(() => {
                     div.style.transform = 'translateX(22vw)'
                     setTimeout(() => {
