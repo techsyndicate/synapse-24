@@ -213,6 +213,24 @@
         .helpPageLink {
             color: #466EFF !important;
         }
+        #skeleton-loader, #skeleton-loader-2 , #skeleton-loader-3 {
+            width: 80%;
+            height: 20px; /* Adjust height as needed */
+            /* background-color: #f0f0f0; Light gray */
+            background: #424242;
+            animation: skeleton-loading 1s infinite alternate; /* Animation */
+            border-radius: 4px; /* Rounded corners */
+            margin-bottom: 10px; /* Spacing between skeleton loaders */
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                opacity: 1; /* Light gray */
+            }
+            100% {
+                opacity: 0.3;/* Slightly darker gray */
+            }
+        }
     </style>
 </head>
 <body>
@@ -239,6 +257,9 @@
                 <div class="box">
                     <div class="content">
                         <p id="text">Waiting for you to enter your beautiful words ☺️.</p>
+                        <div id="skeleton-loader" style="display: none;"></div>
+                        <div style="width: 50%; display: none;" id="skeleton-loader-2"></div>
+                        <div style="width: 70%; display: none;" id="skeleton-loader-3"></div>
                     </div>
                         
                     <div class="container2">
@@ -328,8 +349,15 @@
     <script>
         const button = document.getElementById("button")
         const text = document.getElementById("text")
+        const skeleton = document.getElementById("skeleton-loader")
+        const skeleton2 = document.getElementById("skeleton-loader-2")
+        const skeleton3 = document.getElementById("skeleton-loader-3")
         
         button.addEventListener("click", async () => {
+            text.style.display = "none"
+            skeleton.style.display = "block"
+            skeleton2.style.display = "block"
+            skeleton3.style.display = "block"
             const prompt = document.getElementById("prompt").value
             console.log(prompt)
             // const googlePrompt = prompt + ". Please tell some keywords related to this in a format where every keyword is separated by a space and then do not enter anything else. Remember these keywords should be related to a driving app."
@@ -342,15 +370,26 @@
             console.log(newPrompt)
             const googleKeywords = newPrompt.split(" ")
             console.log(googleKeywords)
-            rydr(googleKeywords) // google keywords is an array MANDATORY
+            // rydr(googleKeywords) // google keywords is an array MANDATORY
             // find the most relevant keyword out of these keywords
+            googleKiMaro(`I will send you a list, inside that list, also remove all the punctuation. there are some keywords. Now i want you to rearrange those keywords inside that list and then output another list in a format where every keyword is separated by a space and there isnt anything else added or deleted from the list and no other text .The list provided is: ${googleKeywords}`).then(response => {
+                console.log(response)
+                const newKeywords = response.split(" ")
+                rydr(newKeywords)
+            }).catch(error => {
+                text.innerText = "Oops, an error occured! Please try again later"
+                text.style.display = "block"
+                skeleton.style.display = "none"
+                skeleton2.style.display = "none"
+                skeleton3.style.display = "none"
+            })
             
         });
         
         function rydr(googleKeywords) {
             const keywords = {
                 "To cancel your ride, go to the ride status page and then cancel.": ["cancel", "cancellation", "cancelation", "cancelling", "canceling", "refund", "stop"],
-                "My name is Rydr, how may I help you? ☺️": ["hey", "hi", "hello", "sup", "namaste", "bonjour", "harami", "asalam", "rydr", "name", "call", "help",],
+                "My name is Rydr, how may I help you? ☺️": ["hey", "hi", "hello", "sup", "namaste", "friend", "bonjour", "harami", "asalam", "rydr", "name", "call", "help",],
                 "Check the status of your ride on the ride status page.": ["status", "completion", "pricing", "driver", "location", "dropoff", "pickup", "otp", "password", "passkey", "auto", "bus"],
                 "You can go to the home page to create book a new ride.": ["book", "booking", "register", "reserve", "schedule", "order", "ride", "tour"],
             };
@@ -359,11 +398,15 @@
                 for (const key in keywords) {
                     if (keywords[key].includes(keyword)) {
                         console.log("Found a response");
-                        googleKiMaro("Refine this response. Make it unique everytime but keep it extremely short and crisp. Don't give any options, just some plain text. Make variations and choose one of them and output as plain text only. Don't exceed the word limit over 50 words: " + key).then(response => {
+                        googleKiMaro("Refine this response. Make it unique everytime but keep it extremely short and crisp. Don't give any options, just some plain text. Make variations and choose one of them and output as plain text only. Make them user-friendly and simple. Don't exceed the word limit over 50 words: " + key).then(response => {
                             console.log(response)
                             response[0] = ""
                             response[-1] = ""
                             text.innerText = response
+                            text.style.display = "block"
+                            skeleton.style.display = "none"
+                            skeleton2.style.display = "none"
+                            skeleton3.style.display = "none"
                         })
                         // console.log("idhar", googleResponse)
                         return true;
@@ -383,6 +426,10 @@
             if (!keyFound) {
                 console.log("No key found");
                 text.innerText = "I'm sorry but I don't have the answer for that right now 😔"
+                text.style.display = "block"
+                skeleton.style.display = "none"
+                skeleton2.style.display = "none"
+                skeleton3.style.display = "none"
             }
         }
 
