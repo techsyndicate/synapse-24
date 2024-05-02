@@ -41,12 +41,26 @@ router.get('/', async (req, res) => {
 
 router.post('/vehicle', async (req, res) => {
     const {vehicle} = req.body
+    if (vehicle != 'bus' && vehicle != 'auto') return res.redirect('/status')
     const foundRides = await Ride.find({})
     for (let i = 0; i < foundRides.length; i++) {
         if (foundRides[i].riders.includes(req.user.email)) {
+            for (let j = 0; j < foundRides[i].riders.length; j++) {
+                console.log(j)
+                var newFare = foundRides[i].price[j];
+                const currentDistance = foundRides[i].distance[j]
+                if (foundRides[i].vehicle == 'bus' && vehicle == 'auto') {
+                    newFare = (20 + (4.5 * currentDistance)).toFixed(2)
+                } else if (foundRides[i].vehicle == 'auto' && vehicle == 'bus') {
+                    newFare = (50 + (12.5 * currentDistance)).toFixed(2)
+                }
+                foundRides[i].price[j] = newFare
+            }
+            console.log(foundRides[i])
             await Ride.updateOne({rideId: foundRides[i].rideId}, {
                 $set: {
-                    vehicle: vehicle
+                    vehicle: vehicle,
+                    price: foundRides[i].price
                 }
             })
             return res.redirect('/status')
