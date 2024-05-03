@@ -63,6 +63,11 @@
     .navIcon {
         font-size: 0px;
         line-height: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
     }
     .navIcon i {
         font-size: 2vw;
@@ -78,6 +83,23 @@
         color: white;
         text-decoration: none;
     }
+
+    .menu {
+        width: 5vw;
+        height: 5vh;
+        /* background: red; */
+        position: absolute;
+        top: 3vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #212122;
+        display: none;
+    }
+    .logout {
+        font-size: 1vw;
+    }
 </style>
 <div class="nav">
     <div id="cursor"></div>
@@ -88,11 +110,31 @@
         <a data-cursor="pointer" href="/status" class="rideStatusPageLink">Ride Status</a>
         <a data-cursor="pointer" href="/rewards" class="rewardsPageLink">Rewards</a>
         <a data-cursor="pointer" href="/help" class="helpPageLink">Help</a>
-        <div class="navIcon" data-cursor="pointer"><img src="<%= user.pfp %>"></div>
+        <div class="navIcon" data-cursor="pointer">
+            <img id="img" src="<%= user.pfp %>">
+            <div id="menu" class="menu">
+                <a class="logout" href="/logout">Logout</a>
+            </div>
+        </div>
         <div class="navIcon" data-cursor="pointer"><i class="far fa-bell"></i></div>
     </div>
 </div>
 <script defer>
+    const img = document.getElementById('img')
+    const logout = document.getElementById('menu')
+    var clicked = false
+
+    img.addEventListener('click', () => {
+        if (clicked) {
+            logout.style.display = "none"
+            clicked = false
+        } else {
+            logout.style.display = "flex"
+            clicked = true
+        }
+    })
+
+
     window.onload = () => {
     const cursor = document.querySelector("#cursor");
     const cursorBorder = document.querySelector("#cursor-border");
