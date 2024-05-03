@@ -37,7 +37,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(require('prerender-node').set('prerenderToken', 'ZfXAhPhimpXGs6Ta0n0z'));
+app.use(require('prerender-node').set('prerenderToken', process.env.PRERENDER_TOKEN));
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {console.log('MongoDB connected')})
