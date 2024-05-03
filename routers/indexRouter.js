@@ -55,7 +55,11 @@ router.post('/', async (req, res) => {
             };
             newPeople.push(req.user.email)
             currentLocations.push(location)
-            currentPrices.push(getFare(latitude, longitude, myLatitude, myLongitude)[0])
+            if (currentRides[i].vehicle == 'bus') {
+                currentPrices.push(getFare(latitude, longitude, myLatitude, myLongitude)[0])
+            } else {
+                currentPrices.push(20 + (4.5 * getFare(latitude, longitude, myLatitude, myLongitude)[1]))
+            }
             currentMyLocations.push(myFinalHomeLocation)
             currentDistances.push(getFare(latitude, longitude, myLatitude, myLongitude)[1])
             currentTimes.push(getFare(latitude, longitude, myLatitude, myLongitude)[2])
@@ -98,7 +102,7 @@ router.post('/', async (req, res) => {
         vehicle: 'auto',
         otp: finalOtp,
         rideId: myNewRideId,
-        price: [getFare(latitude, longitude, myLatitude, myLongitude)[0]],
+        price: [20 + (4.5 * getFare(latitude, longitude, myLatitude, myLongitude)[1])],
         distance: [getFare(latitude, longitude, myLatitude, myLongitude)[1]],
         myLocation: [myFinalHomeLocation],
         time: [getFare(latitude, longitude, myLatitude, myLongitude)[2]],
