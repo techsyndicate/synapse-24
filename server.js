@@ -21,7 +21,8 @@ const indexRouter = require('./routers/indexRouter'),
     rewardsRouter = require('./routers/rewardsRouter'),
     statusRouter = require('./routers/statusRouter'),
     helpRouter = require('./routers/helpRouter'),
-    apiRouter = require('./routers/apiRouter')
+    apiRouter = require('./routers/apiRouter'),
+    selectRouter = require('./routers/selectRouter')
     
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
@@ -54,5 +55,6 @@ app.use('/kyc', ensureAuthenticated, kycRouter)
 app.use('/status', ensureAuthenticated, ensureKyc, statusRouter)
 app.use('/help', ensureAuthenticated, helpRouter)
 app.use('/rewards', ensureAuthenticated, ensureKyc, rewardsRouter)
+app.use('/select', ensureAuthenticated, selectRouter)
 
 app.listen(PORT, console.log(`Ordin <3 TS listening on port ${PORT}`))
