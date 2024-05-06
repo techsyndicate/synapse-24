@@ -41,7 +41,10 @@ router.get('/', async (req, res) => {
 
 router.post('/vehicle', async (req, res) => {
     const {vehicle} = req.body
-    if (vehicle != 'bus' && vehicle != 'auto') return res.redirect('/status')
+    if (vehicle != 'bus' && vehicle != 'auto') {
+        console.log('invalid')
+        return res.redirect('/status')
+    }
     const foundRides = await Ride.find({})
     for (let i = 0; i < foundRides.length; i++) {
         if (foundRides[i].riders.includes(req.user.email)) {

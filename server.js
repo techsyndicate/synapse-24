@@ -38,6 +38,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(require('prerender-node').set('prerenderToken', process.env.PRERENDER_TOKEN));
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {console.log('MongoDB connected')})
@@ -53,7 +54,7 @@ app.use('/dashboard', ensureAuthenticated, dashboardRouter)
 app.use('/api', ensureAuthenticated, apiRouter)
 app.use('/kyc', ensureAuthenticated, kycRouter)
 app.use('/status', ensureAuthenticated, ensureKyc, statusRouter)
-app.use('/help', ensureAuthenticated, helpRouter)
+app.use('/help', ensureAuthenticated, ensureKyc, helpRouter)
 app.use('/rewards', ensureAuthenticated, ensureKyc, rewardsRouter)
 app.use('/select', ensureAuthenticated, selectRouter)
 
