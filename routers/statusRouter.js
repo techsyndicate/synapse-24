@@ -3,13 +3,14 @@ const User = require('../schemas/userSchema')
 const Ride = require('../schemas/rideSchema')
 
 router.get('/', async (req, res) => {
-    const foundUser = await User.findOne({email: req.user.email})
-    if (foundUser.status == 'free') return res.redirect('/')
+    const user = req.user
+    if (user.status == 'free') return res.redirect('/')
     var myRide = {riders: []};
     const foundRides = await Ride.find({})
+    const allUsers = await User.find({})
     for (let i = 0; i < foundRides.length; i++) {
-        if (foundRides[i].riders.includes(req.user.email)) {
-            const overallIndex = foundRides[i].riders.indexOf(req.user.email)
+        if (foundRides[i].riders.includes(user.email)) {
+            const overallIndex = foundRides[i].riders.indexOf(user.email)
             const foundDriver = await User.findOne({email: foundRides[i].driver})
             myRide.price = foundRides[i].price[overallIndex]
             myRide.distance = foundRides[i].distance[overallIndex]
@@ -20,8 +21,13 @@ router.get('/', async (req, res) => {
             myRide.latitude = Number(foundRides[i].latitude[overallIndex])
             myRide.longitude = Number(foundRides[i].longitude[overallIndex])
             for (let k = 0; k < foundRides[i].riders.length; k++) {
-                const theFoundUser = await User.findOne({email: foundRides[i].riders[k]})
-                myRide.riders.push(theFoundUser)
+                for (let n = 0; n < allUsers.length; n++) {
+                    if (allUsers[n].email == foundRides[i].riders[k]) {
+                        myRide.riders.push(allUsers[n])
+                    }
+                }
+                // const theFoundUser = await User.findOne({email: foundRides[i].riders[k]})
+                // myRide.riders.push(theFoundUser)
             }
             if (foundRides[i].location[overallIndex].length > 20) {
                 myRide.dropOff = foundRides[i].location[overallIndex].substring(0, 20) + '...'
@@ -36,7 +42,7 @@ router.get('/', async (req, res) => {
             break
         }
     }
-    res.render('status', {user: foundUser, ride: myRide})
+    res.render('status', {user: req.user, ride: myRide})
 })
 
 router.post('/vehicle', async (req, res) => {
@@ -85,6 +91,7 @@ router.post('/cancel', async (req, res) => {
             foundRides[i].time.splice(overallIndex, 1)
             foundRides[i].latitude.splice(overallIndex, 1)
             foundRides[i].longitude.splice(overallIndex, 1)
+            foundRides[i].seats.splice(overallIndex, 1)
             console.log(foundRides[i])
             await Ride.updateOne({rideId: foundRides[i].rideId}, {
                 $set: {
@@ -95,7 +102,8 @@ router.post('/cancel', async (req, res) => {
                     distance: foundRides[i].distance,
                     time: foundRides[i].time,
                     latitude: foundRides[i].latitude,
-                    longitude: foundRides[i].longitude
+                    longitude: foundRides[i].longitude,
+                    seats: foundRides[i].seats
                 }
             })
             await User.updateOne({email: req.user.email}, {

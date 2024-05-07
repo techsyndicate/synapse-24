@@ -4,8 +4,361 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Seats</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        * {box-sizing: border-box;}
+        .container {
+            width: 75vw;
+            margin-left: 12.5vw;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5vw;
+        }
+        .seatsContainer {
+            width: 25vw;
+            border: 1px solid white;
+            border-radius: 2.5vw;
+            padding-bottom: 1.5vw;
+            height: 53.5vw;
+        }
+        .seatsKaStampPolygonThingy {
+            clip-path: polygon(0% 0%, 0% 100%, 75% 100%, 100% 0%);
+            border-top-left-radius: 2.5vw;
+            width: 15vw;
+            height: 10vw;
+            background-color: #ccc;
+            padding: 1px;
+            transform: translate(-0.56px, -0.56px)
+        }
+        .seatContainer {
+            position: relative;
+            width: 4.5vw;
+            height: 4.5vw;
+            border: 0.1vw solid white;
+            border-radius: 0.8vw;
+            display: flex;
+            align-items: flex-end;
+        }
+        .seatsRow {
+            display: flex;
+            justify-content: space-around;
+        }
+        .seatGola {
+            border: 0.1vw solid white;
+            border-radius: 1.3vw;
+            height: 1.5vw;
+            width: 100%;
+            transform: translateY(0.048vw);
+        }
+        .right {
+            width: 35vw;
+        }
+        .right h1 {
+            margin: 0.5vw 0px 1.5vw 0px;
+            font-size: 2.3vw;
+        }
+        .rightBox {
+            border-radius: 1.7vw;
+            height: 17.5vw;
+            background-color: #18181b;
+            padding: 1.6vw 2vw;
+        }
+        .boxKaHead {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .boxKaHead p {
+            font-size: 1.15vw;
+            text-align: right;
+        }
+        .boxKaHead p:nth-child(2) {
+            color: #53faaa;
+            font-size: 1vw;
+            margin-top: 0.33vw;
+        }
+        .driverInfo img {
+            border-radius: 3vw;
+            width: 3.2vw;
+            height: 3.2vw;
+            object-fit: cover;
+            margin-right: 0.8vw;
+        }
+        .driverInfo {
+            display: flex;
+            align-items: center;
+            font-size: 1.15vw;
+        }
+        p.driverInfoTextInfo {
+            font-size: 1vw;
+            color: #53faaa;
+            display: flex;
+            align-items: center;
+            gap: 0.45vw;
+            margin-top: 0.33vw;
+        }
+        .dot {
+            width: 0.2vw;
+            height: 0.2vw;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 0.2vw;
+        }
+        .busIcon {
+            color: black;
+            background-color: #466eff;
+            padding: 0.23vw 1.2vw;
+            font-size: 1vw;
+            border-radius: 0.5vw;
+        }
+        .pickupInfoContainer {
+            display: flex;
+            height: 100%;
+            gap: 1.5vw;
+            margin-left: 0.5vw;
+            margin-top: 1.9vw;
+        }
+        .pickupInfoContainer img {
+            height: 7.5vw;
+        }
+        .pickupInfo {
+            flex: 1;
+        }
+        .pickupItem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pickupItem p {
+            font-size: 1vw;
+            line-height: 1.4;
+        }
+        .pickupItem p:nth-child(1) {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        .pickupItem:nth-child(2) {
+            margin-top: 3.2vw;
+        }
+        .leaflet-container {
+            width: 35vw;
+            height: 29.35vw;
+            border-radius: 1.7vw;
+            margin-top: 1.9vw;
+            border: 2px solid #131316;
+            background: none;
+            outline: none;
+        }
+        .continue {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 0.5vw;
+            color: black;
+            background-color: #53faaa;
+            font-size: 0.95vw;
+            height: fit-content;
+            padding: 0.6vw 1.8vw;
+        }
+    </style>
 </head>
 <body>
     <%- include('./partials/cursor.ejs') %>
+    <div class="container">
+        <div class="seatsContainer">
+            <div class="seatsKaStampPolygonThingy">
+                <div class="seatsKaStampPolygonThingy" style="width: 100%; height: 100%; background-color: #131316;"></div>
+            </div>
+            <div class="seatsRow" style="margin-top: 3.5vw;">
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="a1">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="a2">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="a3">
+                    <div class="seatGola"></div>
+                </div>
+            </div>
+            <div class="seatsRow" style="margin-top: 1.5vw;">
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="b1">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="b2">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" style="transform: rotate(180deg)" data-cursor="pointer" data-value="b3">
+                    <div class="seatGola"></div>
+                </div>
+            </div>
+            <div class="seatsRow" style="margin-top: 3.5vw;">
+                <div class="seatContainer selectableSeats" style="transform: rotate(90deg)" data-cursor="pointer" data-value="c1">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden;">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden;">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" style="transform: rotate(270deg)" data-cursor="pointer" data-value="c2">
+                    <div class="seatGola"></div>
+                </div>
+            </div>
+            <div class="seatsRow" style="margin-top: 1.5vw;">
+                <div class="seatContainer selectableSeats" style="transform: rotate(90deg)" data-cursor="pointer" data-value="d1">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden;">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden;">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" style="transform: rotate(270deg)" data-cursor="pointer" data-value="d2">
+                    <div class="seatGola"></div>
+                </div>
+            </div>
+            <div class="seatsRow" style="margin-top: 3.5vw;">
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="e1">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="e2">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden; transform: rotate(180deg)">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="e3">
+                    <div class="seatGola"></div>
+                </div>
+            </div>
+            <div class="seatsRow" style="margin-top: 1.5vw;">
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="f1">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="f2">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer" style="visibility: hidden;">
+                    <div class="seatGola"></div>
+                </div>
+                <div class="seatContainer selectableSeats" data-cursor="pointer" data-value="f3">
+                    <div class="seatGola"></div>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <h1><span style="color: #466eff">Select</span> Seat</h1>
+            <div class="rightBox">
+                <div class="boxKaHead">
+                    <div class="driverInfo">
+                        <img src="<%= pfp %>">
+                        <div class="driverInfoText">
+                            <p><%= driver %> &nbsp;<span class="busIcon">Bus</span></p>
+                            <p class="driverInfoTextInfo"><%= time %> Mins <span class="dot"></span> <%= distance %> Km</p>
+                        </div>
+                    </div>
+                    <div class="prices">
+                        <p>₹<%= price %></p>
+                        <p>+30.00</p>
+                    </div>
+                </div>
+                <div class="pickupInfoContainer">
+                    <img src="pickup.png">
+                    <div class="pickupInfo">
+                        <div class="pickupItem">
+                            <div>
+                                <p>Pickup</p>
+                                <p><%= pickup %></p>
+                            </div>
+                        </div>
+                        <div class="pickupItem">
+                            <div>
+                                <p>Drop Off</p>
+                                <p><%= dropoff %></p>
+                            </div>
+                            <div class="continue" data-cursor="pointer" onclick="window.location.href = '/status'">Continue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="map" style="position: relative"></div>
+        </div>
+    </div>
+    <script>
+        var foundOverallSeat, currentlySelected
+        <% for (let i = 0; i < seats.length; i++) { %>
+            if ('<%= seats[i] %>' != 'noseatfound') {
+                foundOverallSeat = document.querySelector('[data-value="<%= seats[i] %>"]')
+                foundOverallSeat.children[0].style.border = '0.1vw solid rgba(255, 255, 255, 0.4)'
+                foundOverallSeat.style.border = '0.1vw solid rgba(255, 255, 255, 0.4)'
+                foundOverallSeat.children[0].style.borderRadius = '1.3vw'
+                foundOverallSeat.style.borderRadius = '0.8vw'
+                foundOverallSeat.setAttribute('data-disabled', 'true')
+            }
+        <% } %>
+        <% if (mySeat != 'noseatfound') { %>
+        const foundSeat = document.querySelector('[data-value="<%= mySeat %>"]')
+        foundSeat.children[0].style.border = '0.1vw solid #466eff'
+        foundSeat.style.border = '0.1vw solid #466eff'
+        foundSeat.children[0].style.borderRadius = '1.3vw'
+        foundSeat.style.borderRadius = '0.8vw'
+        foundSeat.setAttribute('data-disabled', 'false')
+        currentlySelected = '<%= mySeat %>'
+        <% } %>
+        function showPosition() {
+            var redMarker = L.icon({
+                iconUrl: '/marker.png',
+                iconSize: [80, 80],
+                iconAnchor: [40, 40],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            console.log('called')
+            var map = L.map('map', {zoomControl: false, attributionControl: false}).setView([<%= latitude %>, <%= longitude %>], 16);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+            const mapContainer = document.querySelector('.leaflet-container')
+            var marker = L.marker([<%= latitude %>, <%= longitude %>], {icon: redMarker}).addTo(map);
+        }
+        showPosition()
+        const allSelectableSeats = document.getElementsByClassName('selectableSeats')
+        for (let i = 0; i < allSelectableSeats.length; i++) {
+            allSelectableSeats[i].addEventListener('click', () => {
+                if (allSelectableSeats[i].getAttribute('data-disabled') == 'true') return
+                const selectedSeat = allSelectableSeats[i].getAttribute('data-value')
+                console.log(selectedSeat)
+                fetch('/select', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        seat: selectedSeat
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(async response => {
+                    if (response.ok) {
+                        window.location.reload()
+                    } else {
+                        console.log('bhosdike')
+                    }
+                })
+                .catch(err => {
+                    console.log('Error: ' + err)
+                })
+            })
+        }
+    </script>
 </body>
 </html>

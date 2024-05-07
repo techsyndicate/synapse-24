@@ -41,6 +41,11 @@ const driverSchema = new Schema({
     longitude: {
         type: Array,
         required: true
+    },
+    seats: {
+        type: Array,
+        required: true,
+        default: []
     }
 })
 

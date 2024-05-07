@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
         const distance = earthRadius * c;
 
         const timeTaken = Math.round((distance / 45) * 60)
-        return [(50 + (12.5 * distance)).toFixed(2), distance.toFixed(2), timeTaken];
+        return [(15 + (6.5 * distance)).toFixed(2), distance.toFixed(2), timeTaken];
     }
     const allDrivers = await Users.findOne({type: 'Driver', status: 'free'})
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
     }
     const currentRides = await Rides.find({})
     for (let i = 0; i < currentRides.length; i++) {
-        const maxLimit = currentRides[i].vehicle == 'auto' ? 3 : 10
+        const maxLimit = currentRides[i].vehicle == 'auto' ? 3 : 16
         if (currentRides[i].riders.length >= maxLimit) {
             continue;
         } else {
@@ -49,7 +49,8 @@ router.post('/', async (req, res) => {
                 currentMyLocations = currentRides[i].myLocation,
                 currentTimes = currentRides[i].time,
                 currentLatitudes = currentRides[i].latitude,
-                currentLongitudes = currentRides[i].longitude
+                currentLongitudes = currentRides[i].longitude,
+                currentSeats = currentRides[i].seats
             if (newPeople.includes(req.user.email)) {
                 return res.redirect('/')
             };
@@ -58,13 +59,14 @@ router.post('/', async (req, res) => {
             if (currentRides[i].vehicle == 'bus') {
                 currentPrices.push(getFare(latitude, longitude, myLatitude, myLongitude)[0])
             } else {
-                currentPrices.push(20 + (4.5 * getFare(latitude, longitude, myLatitude, myLongitude)[1]))
+                currentPrices.push(15 + (7.5 * getFare(latitude, longitude, myLatitude, myLongitude)[1]))
             }
             currentMyLocations.push(myFinalHomeLocation)
             currentDistances.push(getFare(latitude, longitude, myLatitude, myLongitude)[1])
             currentTimes.push(getFare(latitude, longitude, myLatitude, myLongitude)[2])
             currentLatitudes.push(Number(latitude))
             currentLongitudes.push(Number(longitude))
+            currentSeats.push('noseatfound')
             await Rides.updateOne({rideId: currentRides[i].rideId}, {
                 $set: {
                     riders: newPeople,
@@ -74,7 +76,8 @@ router.post('/', async (req, res) => {
                     distance: currentDistances,
                     time: currentTimes,
                     latitude: currentLatitudes,
-                    longitude: currentLongitudes
+                    longitude: currentLongitudes,
+                    seats: currentSeats
                 }
             })
             const foundMyUser = await Users.findOne({email: req.user.email})
@@ -102,12 +105,13 @@ router.post('/', async (req, res) => {
         vehicle: 'auto',
         otp: finalOtp,
         rideId: myNewRideId,
-        price: [20 + (4.5 * getFare(latitude, longitude, myLatitude, myLongitude)[1])],
+        price: [15 + (7.5 * getFare(latitude, longitude, myLatitude, myLongitude)[1])],
         distance: [getFare(latitude, longitude, myLatitude, myLongitude)[1]],
         myLocation: [myFinalHomeLocation],
         time: [getFare(latitude, longitude, myLatitude, myLongitude)[2]],
         latitude: [Number(latitude)],
-        longitude: [Number(longitude)]
+        longitude: [Number(longitude)],
+        seats: ['noseatfound']
     })
     await newRide.save()
     await Users.updateOne({email: req.user.email}, {
