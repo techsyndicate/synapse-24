@@ -367,26 +367,75 @@
             // const googleKeywords = googleAnswer.split(" ")
             // console.log(googleKeywords)
 
-            const newPrompt = prompt.toLowerCase()
-            console.log(newPrompt)
-            const googleKeywords = newPrompt.split(" ")
-            console.log(googleKeywords)
+            // const newPrompt = prompt.toLowerCase()
+            // console.log(newPrompt)
+            // const googleKeywords = newPrompt.split(" ")
+            // console.log(googleKeywords)
             // rydr(googleKeywords) // google keywords is an array MANDATORY
             // find the most relevant keyword out of these keywords
-            googleKiMaro(`I will send you a list, inside that list, also remove all the punctuation. there are some keywords. Now i want you to rearrange those keywords inside that list and then output another list in a format where every keyword is separated by a space and there isnt anything else added or deleted from the list and no other text .The list provided is: ${googleKeywords}`).then(response => {
-                console.log(response)
-                const newKeywords = response.split(" ")
-                rydr(newKeywords)
-            }).catch(error => {
-                text.innerText = "Oops, an error occured! Please try again later"
-                text.style.display = "block"
-                skeleton.style.display = "none"
-                skeleton2.style.display = "none"
-                skeleton3.style.display = "none"
-            })
+            // googleKiMaro(`I will send you a list, inside that list, also remove all the punctuation. there are some keywords. Now i want you to rearrange those keywords inside that list and then output another list in a format where every keyword is separated by a space and there isnt anything else added or deleted from the list and no other text .The list provided is: ${googleKeywords}`).then(response => {
+            //     console.log(response)
+            //     const newKeywords = response.split(" ")
+            //     rydr(newKeywords)
+            // }).catch(error => {
+            //     text.innerText = "Oops, an error occured! Please try again later"
+            //     text.style.display = "block"
+            //     skeleton.style.display = "none"
+            //     skeleton2.style.display = "none"
+            //     skeleton3.style.display = "none"
+            // })
+            rydr(prompt)
             
         });
         
+        // function rydr(googleKeywords) {
+        //     const keywords = {
+        //         "My name is Rydr, how may I help you? ☺️": ["hey", "hi", "hello", "sup", "namaste", "friend", "bonjour", "harami", "asalam", "rydr", "name", "call", "help",],
+        //         "Check the status of your ride on the ride status page.": ["status", "completion", "pricing", "driver", "location", "dropoff", "pickup", "otp", "password", "passkey", "auto", "track", "bus"],
+        //         "You can go to the home page to create book a new ride.": ["book", "booking", "register", "reserve", "schedule", "order", "ride", "tour"],
+        //         "To cancel your ride, go to the ride status page and then cancel.": ["cancel", "cancellation", "cancelation", "cancelling", "canceling", "refund", "stop"],
+        //         "You can complete rides and then you would be rewarded with 100 points. Using these points, you can claim subscriptions or rewards on the rewards page.": ["reward", "rewards", "subscriptions", "subscription", "discount", "prizes", "prize", "claim", "redeem", "collect"],
+        //         "KYC is Know Your Customer. You can capture your picture on our website to verify your identity": ["kyc", "picture", "photo", "pfp", "profile", "camera"]
+        //     };
+
+        //     function findKeyword(keyword) {
+        //         for (const key in keywords) {
+        //             if (keywords[key].includes(keyword)) {
+        //                 console.log("Found a response");
+        //                 googleKiMaro("Refine this response. Make it unique everytime but keep it short and crisp yet detailed. Don't give any options, just some plain text. Make variations and choose one of them and output as plain text only. Make them user-friendly and simple. Don't exceed the word limit over 50 words: " + key).then(response => {
+        //                     console.log(response)
+        //                     response[0] = ""
+        //                     response[-1] = ""
+        //                     text.innerText = response
+        //                     text.style.display = "block"
+        //                     skeleton.style.display = "none"
+        //                     skeleton2.style.display = "none"
+        //                     skeleton3.style.display = "none"
+        //                 })
+        //                 // console.log("idhar", googleResponse)
+        //                 return true;
+        //             }
+        //         }
+        //         return false;
+        //     }
+
+        //     let keyFound = false;
+        //     for (const keyword of googleKeywords) {
+        //         if (findKeyword(keyword)) {
+        //             keyFound = true;
+        //             break;
+        //         }
+        //     }
+
+        //     if (!keyFound) {
+        //         console.log("No key found");
+        //         text.innerText = "I'm sorry but I don't have the answer for that right now 😔"
+        //         text.style.display = "block"
+        //         skeleton.style.display = "none"
+        //         skeleton2.style.display = "none"
+        //         skeleton3.style.display = "none"
+        //     }
+        // }
         function rydr(googleKeywords) {
             const keywords = {
                 "My name is Rydr, how may I help you? ☺️": ["hey", "hi", "hello", "sup", "namaste", "friend", "bonjour", "harami", "asalam", "rydr", "name", "call", "help",],
@@ -397,43 +446,48 @@
                 "KYC is Know Your Customer. You can capture your picture on our website to verify your identity": ["kyc", "picture", "photo", "pfp", "profile", "camera"]
             };
 
-            function findKeyword(keyword) {
-                for (const key in keywords) {
-                    if (keywords[key].includes(keyword)) {
-                        console.log("Found a response");
-                        googleKiMaro("Refine this response. Make it unique everytime but keep it short and crisp yet detailed. Don't give any options, just some plain text. Make variations and choose one of them and output as plain text only. Make them user-friendly and simple. Don't exceed the word limit over 50 words: " + key).then(response => {
-                            console.log(response)
-                            response[0] = ""
-                            response[-1] = ""
-                            text.innerText = response
-                            text.style.display = "block"
-                            skeleton.style.display = "none"
-                            skeleton2.style.display = "none"
-                            skeleton3.style.display = "none"
-                        })
-                        // console.log("idhar", googleResponse)
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            let keyFound = false;
-            for (const keyword of googleKeywords) {
-                if (findKeyword(keyword)) {
-                    keyFound = true;
-                    break;
-                }
-            }
-
-            if (!keyFound) {
-                console.log("No key found");
-                text.innerText = "I'm sorry but I don't have the answer for that right now 😔"
+            // function findKeyword(keyword) {
+            //     for (const key in keywords) {
+            //         if (keywords[key].includes(keyword)) {
+            //             console.log("Found a response");
+            //             googleKiMaro("Refine this response. Make it unique everytime but keep it short and crisp yet detailed. Don't give any options, just some plain text. Make variations and choose one of them and output as plain text only. Make them user-friendly and simple. Don't exceed the word limit over 50 words: " + key).then(response => {
+            //                 console.log(response)
+            //                 response[0] = ""
+            //                 response[-1] = ""
+            //                 text.innerText = response
+            //                 text.style.display = "block"
+            //                 skeleton.style.display = "none"
+            //                 skeleton2.style.display = "none"
+            //                 skeleton3.style.display = "none"
+            //             })
+            //             // console.log("idhar", googleResponse)
+            //             return true;
+            //         }
+            //     }
+            //     return false;
+            googleKiMaro(`here is a query: ${googleKeywords}. ONLY USE THE DATASET TO ANSWER THE QUESTIONS NOT ANYTHING ELSE AND DONT MAKE UP YOUR OWN ANSWERS. Only choose the answer to the question in the dataset and then refine and give the response Now using this query, identify which response will be the best from the given dataset by using the keywords given in the arrays. Also Make it unique everytime but keep it short and crisp yet detailed. Don't give any options, just some plain text. Make variations and choose one of them and output as plain text only. Don't exceed the word limit over 50 words. The dataset: "My name is Rydr, how may I help you? ☺️": ["hey", "hi", "hello", "sup", "namaste", "friend", "bonjour", "harami", "asalam", "rydr", "name", "call", "help",],
+                "Check the status of your ride on the ride status page.": ["status", "completion", "pricing", "driver", "location", "dropoff", "pickup", "otp", "password", "passkey", "auto", "track", "bus"],
+                "You can go to the home page to create book a new ride.": ["book", "booking", "register", "reserve", "schedule", "order", "ride", "tour"],
+                "To cancel your ride, go to the ride status page and then cancel.": ["cancel", "cancellation", "cancelation", "cancelling", "canceling", "refund", "stop"],
+                "You can complete rides and then you would be rewarded with 100 points. Using these points, you can claim subscriptions or rewards on the rewards page.": ["reward", "rewards", "subscriptions", "subscription", "discount", "prizes", "prize", "claim", "redeem", "collect"],
+                "KYC is Know Your Customer. You can capture your picture on our website to verify your identity": ["kyc", "picture", "photo", "pfp", "profile", "camera"].`)
+            .then(response => {
+                console.log(response)
+                response[0] = ""
+                response[-1] = ""
+                text.innerText = response
                 text.style.display = "block"
                 skeleton.style.display = "none"
                 skeleton2.style.display = "none"
                 skeleton3.style.display = "none"
-            }
+            }).catch(err => {
+                console.log(err)
+                text.innerText = "Uh oh! An error occured. Please try again later"
+                text.style.display = "block"
+                skeleton.style.display = "none"
+                skeleton2.style.display = "none"
+                skeleton3.style.display = "none"
+            })  
         }
 
 
