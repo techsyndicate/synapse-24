@@ -193,59 +193,59 @@
             <button onclick="window.location.reload()" class="take">Take another</button>
         </div>
     </main>
-<script>
-  const player = document.getElementById('player');
-  const canvas = document.getElementById('canvas');
-  const context = canvas.getContext('2d');
-  const vidP = document.getElementById('vid-p')
-  const buttons = document.getElementById('buttons')
-  const secondButtons = document.getElementById('second-buttons')
-  const captureButton = document.getElementById('capture');
+        <script>
+        const player = document.getElementById('player');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const vidP = document.getElementById('vid-p')
+        const buttons = document.getElementById('buttons')
+        const secondButtons = document.getElementById('second-buttons')
+        const captureButton = document.getElementById('capture');
 
-  const input = document.getElementById('input')
+        const input = document.getElementById('input')
 
-  const constraints = {
-    video: true,
-  };
+        const constraints = {
+            video: true,
+        };
 
-  captureButton.addEventListener('click', () => {
-      document.getElementById('second-buttons').style.display = 'none'
-      document.getElementById('buttons').style.display = 'flex'
-      context.drawImage(player, 0, 0, canvas.width, canvas.height);
-      vidP.innerText = "Captured Photo"
-  });
-  function startCamera() {
-      navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        player.srcObject = stream;
-        document.getElementById('cameraOverlay').style.display = 'none'
-        document.getElementById('capture').style.display = 'inline'
-      });
-  }
-  function uploadImage(e) {
-      e.target.innerHTML = 'Uploading...'
-      e.target.style.opacity = '0.6'
-      e.target.style.cursor = 'not-allowed'
-      e.target.disabled = 'true'
-      const imageUrlData = canvas.toDataURL('image/png')
-      fetch('/kyc/uploadKyc', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({imageUrlData})
-      })
-      .then(response => {
-        if (response.ok) {
-            window.location.href = '/'
-        } else {
-            alert('There was an error. Please try again.')
-            window.location.reload()
+        captureButton.addEventListener('click', () => {
+            document.getElementById('second-buttons').style.display = 'none'
+            document.getElementById('buttons').style.display = 'flex'
+            context.drawImage(player, 0, 0, canvas.width, canvas.height);
+            vidP.innerText = "Captured Photo"
+        });
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+                player.srcObject = stream;
+                document.getElementById('cameraOverlay').style.display = 'none'
+                document.getElementById('capture').style.display = 'inline'
+            });
         }
-      })
-      .catch(err => {
-        console.log(`Le error ab ${err}`)
-      })
-  }
-</script>
-
+        function uploadImage(e) {
+            e.target.innerHTML = 'Uploading...'
+            e.target.style.opacity = '0.6'
+            e.target.style.cursor = 'not-allowed'
+            e.target.disabled = 'true'
+            const imageUrlData = canvas.toDataURL('image/png')
+            fetch('/kyc/uploadKyc', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({imageUrlData})
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/'
+                } else {
+                    alert('There was an error. Please try again.')
+                    window.location.reload()
+                }
+            })
+            .catch(err => {
+                console.log(`Le error ab ${err}`)
+            })
+        }
+        </script>
+    </body>
 </html>

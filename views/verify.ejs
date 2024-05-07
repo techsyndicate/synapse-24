@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,4 +50,219 @@
         });
     </script>
 </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0">
+	<title>Driver Portal - Verify Rider</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+	<style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit';
+        }
+        body {
+            background-color: #131316 !important;
+            color: white;
+        }
+        .nav {
+            width: 90vw;
+            margin-left: 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;  
+            height: 15vh;  
+        }
+        .nav img {
+            height: 3vh;
+        }
+        .navIcons {
+            display: flex;
+            gap: 1.7vw;
+        }
+        .navIcon {
+            font-size: 2vw;
+        } 
+        main {
+            width: 100%;
+        }
+        .headings {
+            align-self: flex-start;
+        }
+        .main-heading {
+            margin-left: 9.5vw;
+            align-self: flex-start;
+            color: #466EFF;
+            font-size: 2.5vw;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+        }
+        .main-para {
+            margin-left: 9.5vw;
+            align-self: flex-start;
+        }
+        .vid-div {
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+            height: fit-content;
+            position: relative;
+            background-color: #000;
+            border-radius: 1vw;
+            margin-left: 10vw;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .vid-div > p{
+            z-index: 100;
+            position: absolute;
+            top: 1vw;
+            left: 1vw;
+        }
+        video, canvas {
+            border-radius: 1vw;
+            width: 80vw;
+            height: 60vh;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        button {
+            width: 7vw;
+            height: 4.63vh;
+            /* padding: 1vh 0; */
+            border-radius: 10px;
+            background: #466EFF;
+            color: #fff;
+            outline: none;
+            border: none;
+            font-size: 1vw;
+            cursor: pointer;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1vw;
+        }
+        .take {
+            width: 9vw;
+            color: #466EFF;
+            background: #fff;
+        }
+        #buttons {
+            display: none;
+        }
+        .cameraOverlay {
+            width: 80vw;
+            height: 60vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #18181b;
+            border-radius: 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .cameraCorner {
+            width: 3vw;
+            height: 3vw;
+            position: absolute;
+        }
+        .plusSymbol {
+            width: 6vw;
+            height: 6vw;
+        }
+        .overlayText {
+            position: absolute;
+            bottom: 1.5vw;
+            width: 100%;
+            text-align: center;
+            color: #696969;
+        }
+        #barcode-scanner {
+            display: none;
+        }
+        </style>
+</head>
+
+<body>
+    <div class="nav">
+        <img src="fullLogo.png">
+        <div class="navIcons">
+            <div class="navIcon"><i class="fas fa-user-circle"></i></div>
+            <div class="navIcon"><i class="far fa-bell"></i></div>
+        </div>
+    </div>
+    <main>
+        <div class="headings">
+            <h1 class="main-heading" >KYC</h1>
+            <p class="main-para" >Verify your identity</p>
+        </div>
+        <br style="clear: both">
+        <div class="vid-div">
+            <div class="cameraOverlay" onclick="startCamera()" id="cameraOverlay">
+                <div class="cameraCorner" style="border-left: 2px solid #696969; border-top: 2px solid #696969; top: 1.5vw; left: 1.5vw;"></div>
+                <div class="cameraCorner" style="border-right: 2px solid #696969; border-top: 2px solid #696969; top: 1.5vw; right: 1.5vw;"></div>
+                <div class="cameraCorner" style="border-left: 2px solid #696969; border-bottom: 2px solid #696969; bottom: 1.5vw; left: 1.5vw;"></div>
+                <div class="cameraCorner" style="border-bottom: 2px solid #696969; border-right: 2px solid #696969; bottom: 1.5vw; right: 1.5vw;"></div>
+                <svg class="plusSymbol" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M56 0V112" stroke="#696969" stroke-width="2"/>
+                    <path d="M0 56L112 56" stroke="#696969" stroke-width="2"/>
+                </svg>  
+                <div class="overlayText">Click to start camera</div>
+            </div>
+            <div id="barcode-scanner"></div>
+        </div>
+        <div id="second-buttons" class="buttons">
+            <button id="capture" style="display: none;">Capture</button>
+        </div>
+        <div id="buttons" class="buttons">
+            <button onclick="uploadImage(event)">Upload</button>
+            <button onclick="window.location.reload()" class="take">Take another</button>
+        </div>
+    </main>
+    <script>
+        function startCamera() {
+            document.getElementById('cameraOverlay').style.display = 'none'
+            document.getElementById('barcode-scanner').style.display = 'flex'
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: "#barcode-scanner"
+                },
+                decoder: {
+                    readers: ["ean_reader", "upc_reader"]
+                }
+                }, function(err) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                console.log("QuaggaJS initialized successfully");
+                Quagga.start();
+            });
+            Quagga.onDetected(function(result) {
+                console.log("Barcode detected and processed", result);
+            }); 
+        }
+    </script>
+    </body>
 </html>

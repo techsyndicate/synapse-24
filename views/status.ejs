@@ -420,7 +420,7 @@
             document.getElementById('fullBodyOverlay').style.opacity = '1'
         })
         function toggleOverlay(e) {
-            if (e.target != document.getElementById('barcode')) {
+            if (e.target == document.getElementById('fullBodyOverlay')) {
                 e.target.style.display = 'none'
                 e.target.style.opacity = '0'
             }
