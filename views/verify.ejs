@@ -120,6 +120,7 @@
             background-color: #000;
             border-radius: 1vw;
             margin-left: 10vw;
+            margin-top: 2.5vh;
         }
         canvas {
             position: absolute;
@@ -212,8 +213,8 @@
     </div>
     <main>
         <div class="headings">
-            <h1 class="main-heading" >KYC</h1>
-            <p class="main-para" >Verify your identity</p>
+            <h1 class="main-heading" >Verify Rider</h1>
+            <p class="main-para" >Scan the rider's barcode to verify them</p>
         </div>
         <br style="clear: both">
         <div class="vid-div">
@@ -239,6 +240,7 @@
         </div>
     </main>
     <script>
+        var alreadySelected = false
         function startCamera() {
             document.getElementById('cameraOverlay').style.display = 'none'
             document.getElementById('barcode-scanner').style.display = 'flex'
@@ -260,7 +262,28 @@
                 Quagga.start();
             });
             Quagga.onDetected(function(result) {
-                alert("Barcode detected and processed", result);
+                console.log(result.codeResult.code);
+                if (alreadySelected) return
+                alreadySelected = true
+                fetch('/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        otp: result.codeResult.code
+                    })
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        alert('User verified!')
+                    } else {
+                        alert('We couldn\'t verify the user. Please try again.')
+                    }
+                })
+                .catch((e) => {
+                    alert('There was an error. Please try again.')
+                })
             }); 
         }
     </script>

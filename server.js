@@ -62,6 +62,6 @@ app.use('/rewards', ensureAuthenticated, ensureKyc, rewardsRouter)
 app.use('/select', ensureAuthenticated, selectRouter)
 app.use('/driverStatus', ensureAuthenticated, driverStatusRouter)
 app.use('/temp', tempRouter)
-app.use('/verify', verifyRouter)
+app.use('/verify', ensureAuthenticated, verifyRouter)
 
 app.listen(PORT, console.log(`Ordin <3 TS listening on port ${PORT}`))

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <video id="video"></video>
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        const videoElement = document.getElementById('video');
+        // Set the camera stream as the source for the video element
+        videoElement.srcObject = stream;
+        
+        // Initialize the BarcodeDetector
+        const barcodeDetector = new BarcodeDetector();
+        
+        // Add an event listener to detect barcodes
+        barcodeDetector.addEventListener('error', err => {
+          console.error('Barcode detection error:', err);
+        });
+        
+        barcodeDetector.addEventListener('detected', event => {
+          const barcodes = event.detectedCodes;
+          console.log('Detected barcodes:', barcodes);
+          
+          // Handle detected barcodes
+          for (const barcode of barcodes) {
+            console.log('Barcode type:', barcode.format);
+            console.log('Barcode data:', barcode.rawValue);
+          }
+        });
+        
+        // Start barcode detection on the video stream
+        barcodeDetector.detect(videoElement)
+          .catch(err => {
+            console.error('Error starting barcode detection:', err);
+          });
+      })
+      .catch(err => {
+        console.error('Error accessing camera:', err);
+      });
+    </script>
+</body>
+</html>
