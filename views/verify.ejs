@@ -260,7 +260,7 @@
                 Quagga.start();
             });
             Quagga.onDetected(function(result) {
-                alert("Code is " + result);
+                console.log(result.codeResult.code);
             }); 
         }
     </script>
