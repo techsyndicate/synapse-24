@@ -262,6 +262,7 @@
             });
             Quagga.onDetected(function(result) {
                 console.log(result.codeResult.code);
+                if (alreadySelected) return
                 alreadySelected = true
                 fetch('/verify', {
                     method: 'POST',
