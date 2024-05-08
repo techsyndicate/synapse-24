@@ -100,6 +100,9 @@
     .logout {
         font-size: 1vw;
     }
+    .rideStatusPageLink {
+        color: #466eff !important;
+    }
 </style>
 <div class="nav">
     <div id="cursor"></div>
@@ -107,7 +110,11 @@
     <img src="fullLogo.png">
     <div class="navIcons">
         <a data-cursor="pointer" href="/" class="homePageLink">Home</a>
-        <a data-cursor="pointer" href="/status" class="rideStatusPageLink">Ride Status</a>
+        <% if (user.type === "Driver") { %>
+            <a data-cursor="pointer" href="/driverStatus" class="rideStatusPageLink">Ride Status</a>
+        <% } else { %>
+            <a data-cursor="pointer" href="/status" class="rideStatusPageLink">Ride Status</a>
+        <% } %>    
         <a data-cursor="pointer" href="/rewards" class="rewardsPageLink">Rewards</a>
         <a data-cursor="pointer" href="/help" class="helpPageLink">Help</a>
         <div class="navIcon" data-cursor="pointer">

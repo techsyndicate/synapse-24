@@ -6,6 +6,7 @@ const Users = require('../schemas/userSchema')
 router.get('/', async (req, res) => {
     if (!req.user) return res.redirect('/login')
     if (!req.user.kyc) return res.redirect('/kyc')
+    if (req.user.type == "Driver") return res.redirect("/driverStatus")
     if (req.user.status == 'busy') return res.redirect('/status')
     res.render('index', {user: req.user})
 })

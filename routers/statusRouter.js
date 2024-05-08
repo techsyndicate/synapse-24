@@ -42,7 +42,9 @@ router.get('/', async (req, res) => {
             break
         }
     }
-    res.render('status', {user: req.user, ride: myRide})
+    const isDriver = req.user.type === "Driver"
+    // console.log("BC", isDriver)
+    res.render('status', {user: req.user, ride: myRide, isDriver: isDriver})
 })
 
 router.post('/vehicle', async (req, res) => {

@@ -315,18 +315,10 @@
             <div class="right">
                 <div class="top">
                     <div class="creds">
-                        <% if (isDriver) { %>
                             <img src="<%= user.pfp %>" class="pfp" alt="">
-                        <% } else { %>
-                            <img src="<%= ride.driver.pfp %>" class="pfp" alt="">
-                        <% } %>
                         <div class="names">
                             <div class="headings2">
-                                <% if (isDriver) { %>
-                                    <p><%= user.fname + ' ' + user.lname %></p>
-                                <% } else { %>
-                                    <p><%= ride.driver.fname + ' ' + ride.driver.lname %></p>
-                                <% } %>
+                                <p><%= user.fname + ' ' + user.lname %></p>
                             </div>
                             <div class="times">
                                 <p class="special"><%= ride.time %> Mins</p>

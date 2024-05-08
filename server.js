@@ -24,6 +24,7 @@ const indexRouter = require('./routers/indexRouter'),
     apiRouter = require('./routers/apiRouter'),
     selectRouter = require('./routers/selectRouter'),
     tempRouter = require('./routers/tempRouter'),
+    driverStatusRouter = require('./routers/driverStatus'),
     verifyRouter = require('./routers/verifyRouter')
     
 app.use(express.static('public'))
@@ -59,6 +60,7 @@ app.use('/status', ensureAuthenticated, ensureKyc, statusRouter)
 app.use('/help', ensureAuthenticated, ensureKyc, helpRouter)
 app.use('/rewards', ensureAuthenticated, ensureKyc, rewardsRouter)
 app.use('/select', ensureAuthenticated, selectRouter)
+app.use('/driverStatus', ensureAuthenticated, driverStatusRouter)
 app.use('/temp', tempRouter)
 app.use('/verify', verifyRouter)
 
