@@ -78,7 +78,7 @@
         }
         .top {
             width: 100%;
-            height: 32vh;
+            height: 27.2vh;
             background: #18181b;
             border-radius: 14px;
             display: flex;
@@ -88,10 +88,10 @@
         }
         .bottom {
             width: 100%;
-            height: 23vh;
+            height: 29vh;
             /* background: #18181b; */
             border-radius: 14px;
-            gap: 1vw;
+            gap: 1vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -102,13 +102,35 @@
             height: 80%;
             background: #18181b;
             border-radius: 14px;
-            padding: 0.7vw;
+            padding: 0.9vw;
 
             display: flex;
             flex-direction: column;
             /* align-items: s; */
             justify-content: space-evenly;
+            height: 24vh;
 
+        }
+        .maindiv > div {
+            background-color: #466eff;
+            width: 100%;
+            color: black;
+            padding: 1vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 100vh;
+            margin-top: 0.5vh;
+            font-size: 0.9vw;
+        }
+        .whiteRight {
+            background-color: white;
+            font-size: 1vw;
+            height: 1.2vw;
+            width: 1.2vw;
+            text-align: center;
+            color: black;
+            border-radius: 50vw;
         }
         .cancel {
             width: 20vw;
@@ -122,11 +144,12 @@
             display: flex;
             flex-direction: row;
             align-items: flex-start;
-            justify-content: space-around;
+            justify-content: left;
+            margin-left: 2.5vw;
         }
         .names {
             gap: 0.5vh;
-            margin-left: -1.5vw;
+            margin-left: 1vw;
             display: flex;
             flex-direction: column;
             /* width: ; */
@@ -175,7 +198,6 @@
         .location {
             display: flex;
             flex-direction: row;
-            align-items: center;
             justify-content: center;
             width: 100%;
             gap: 1vw;
@@ -189,16 +211,17 @@
             width: 64%;
         }
         .image {
-            height: 13.6vh;
+            height: 3vh;
             /* width: 1.4vw; */
         }
         .unspecial {
             color: rgba(255, 255, 255, 0.26);
             font-family: Outfit;
-            font-size: 1.9vh;
+            font-size: 1.05vw;
             font-style: normal;
             font-weight: 400;
             line-height: normal;
+            margin-bottom: 0.5vh;
         }
         p {
             color: #FFF;
@@ -265,8 +288,8 @@
             width: 10vw;
         }
         .pfp {
-            width: 4vw !important;
-            height: 4vw !important;
+            width: 3vw !important;
+            height: 3vw !important;
             border-radius: 2.5vw;
             object-fit: cover;
         }
@@ -292,6 +315,18 @@
             max-width: 90vw;
             transform: scale(1.6, 1.6) !important;
         }
+        textarea {
+            background-color: rgba(43, 43, 43, 0.49);
+            width: 100%;
+            height: 8vh;
+            border: none;
+            outline: none;
+            border-radius: 1vh;
+            resize: none;
+            padding: 1vh;
+            color: white;
+            font-family: 'Outfit';
+        }
         </style>
 </head>
 <body>
@@ -301,17 +336,9 @@
         <h1><span style="color: #466EFF;">Ride</span> Status</h1>
         <p>Track your journey in a few clicks!</p>
     </div>
-    <div class="fullBodyOverlay" id="fullBodyOverlay" onclick="toggleOverlay(event)">
-        <svg id="barcode"></svg>
-    </div>
     <main class="main">
         <div class="container">
-            <div id="map" style="position: relative">
-                <div class="otpContainer">
-                    <p>Code for this ride</p>
-                    <svg id="barcode2"></svg>
-                </div>
-            </div>
+            <div id="map" style="position: relative"></div>
             <div class="right">
                 <div class="top">
                     <div class="creds">
@@ -322,81 +349,62 @@
                             </div>
                             <div class="times">
                                 <p class="special"><%= ride.time %> Mins</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" viewBox="0 0 3 3" fill="none">
-                                    <circle cx="1.5" cy="1.5" r="1.5" fill="white" fill-opacity="0.3"/>
-                                </svg>
-                                <p class="special"><%= ride.distance %> Km</p>
                             </div>
                             <div class="buttons">
                                 <form action="/status/vehicle" method="POST">
                                     <input type="hidden" name="vehicle" value="auto">
                                     <% if (ride.vehicle == 'auto') { %>
-                                        <button style="color: #000; background-color: #53FAAA;" type="submit" data-cursor="pointer">Auto</button>
+                                        <button style="color: #000; background-color: #53FAAA; font-size: 0.75vw; padding: 1vh 1.2vh;" type="submit" data-cursor="pointer">Auto</button>
                                     <% } else { %>
-                                        <button style="color: #fff; background-color: #212122;" type="submit" data-cursor="pointer">Auto</button>
+                                        <button style="color: #fff; background-color: #212122; font-size: 0.75vw; padding: 1vh 1.2vh;" type="submit" data-cursor="pointer">Auto</button>
                                     <% } %>
                                 </form>
                                 <form action="/status/vehicle" method="POST">
                                     <input type="hidden" name="vehicle" value="bus">
                                     <% if (ride.vehicle == 'auto') { %>
-                                    <button style="color: #fff; background-color: #212122;" type="submit" data-cursor="pointer">Bus</button>
+                                    <button style="color: #fff; background-color: #212122; font-size: 0.75vw; padding: 1vh 1.2vh;" type="submit" data-cursor="pointer">Bus</button>
                                     <% } else { %>
-                                    <button style="color: #000; background-color: #53FAAA;" type="submit" data-cursor="pointer">Bus</button>
+                                    <button style="color: #000; background-color: #53FAAA; font-size: 0.75vw; padding: 1vh 1.2vh;" type="submit" data-cursor="pointer">Bus</button>
                                     <% } %>
                                 </form>
                             </div>
                         </div>
-                        <p>₹<%= ride.price %></p>
                     </div>
                     <div class="location">
-                        <img class="image" src="/pickup.png" class="waypoint" alt="">
+                        <img class="image" src="/onlyLocation.png" class="waypoint" alt="">
                         <div class="points">
                             <div class="pickup">
-                                <p class="unspecial">Pickup</p>
-                                <p style="width: 10vw; word-wrap: break-word;"><%= ride.myLocation %></p>
-                            </div>
-                            <div class="dropoff">
-                                <p class="unspecial">Dropoff</p>
-                                <p style="width: 10vw; word-wrap: break-word;"><%= ride.dropOff %></p>
+                                <p class="unspecial">Pickup At</p>
+                                <p style="width: 10vw; word-wrap: break-word;"><%= ride.dropoff %></p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="bottom">
                     <div class="maindiv" style="overflow: auto;">
-                        <h1>Grouped <span style="color: #466EFF;">Riders</span> <span style="color: rgba(244, 244, 244, 0.25);">(<%= ride.riders.length %>)</span></h1>
-                        <div class="riders">
-                            <% for (let i = 0; i < ride.riders.length; i++) { %>
-                            <div class="rider">
-                                <img class="pfp-2" src="<%= ride.riders[i].pfp %>" class="person-2" alt="">
-                                <p><%= ride.riders[i].fname + ' ' + ride.riders[i].lname %></p>
-                            </div>
-                            <% } %>
+                        <textarea placeholder="Send Message to User..."></textarea>
+                        <div>
+                            Send Message
+                            <div class="whiteRight"><i class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
-                    <form action="/status/cancel" method="post">
+                    <div>
+                        <a href="/verify" style="text-decoration: none">
+                        <button class="cancel" data-cursor="pointer" style="margin-bottom: 1vh; background-color: #18181b; border: 1px solid rgba(255, 255, 255, 0.2); color: white;">
+                            Verify Ride
+                        </button>
+                        </a>
+                        <a href="/driverStatus/cancel" style="text-decoration: none">
                         <button class="cancel" data-cursor="pointer">
                             Cancel Ride
                         </button>
+                        </a>
                     </form>
                 </div>
             </div>
         </div>
     </main>
     <script>
-        JsBarcode("#barcode", "<%= ride.otp %>", {
-            format: 'code128',
-            displayValue: false,
-            lineColor: "black",
-            background: "#fff"
-        });
-        JsBarcode("#barcode2", "<%= ride.otp %>", {
-            format: 'code128',
-            displayValue: false,
-            lineColor: "#466eff",
-            background: "transparent",
-            height: 55
-        });
         (function showPosition() {
             var redMarker = L.icon({
                 iconUrl: '/marker.png',
@@ -412,20 +420,8 @@
                 maxZoom: 19
             }).addTo(map);
             const mapContainer = document.querySelector('.leaflet-container')
-            const customOverlay = document.createElement('div')
             var marker = L.marker([<%= ride.latitude %>, <%= ride.longitude %>], {icon: redMarker}).addTo(map);
         })()
-        const otpContainer = document.getElementsByClassName('otpContainer')[0]
-        otpContainer.addEventListener('click', (e) => {
-            document.getElementById('fullBodyOverlay').style.display = 'flex'
-            document.getElementById('fullBodyOverlay').style.opacity = '1'
-        })
-        function toggleOverlay(e) {
-            if (e.target == document.getElementById('fullBodyOverlay')) {
-                e.target.style.display = 'none'
-                e.target.style.opacity = '0'
-            }
-        }
         </script>
 </body>
 </html>

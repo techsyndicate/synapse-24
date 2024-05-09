@@ -2,6 +2,7 @@ const router = require('express').Router(),
     Ride = require('../schemas/rideSchema')
 
 router.get('/', (req, res) => {
+    // if (req.user.type != 'Driver') return res.redirect('/status')
     res.render('verify')
 })
 
